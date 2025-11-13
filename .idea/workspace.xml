@@ -4,37 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/TicTacToe.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Read_Me.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Application/IGFactory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Application/IGameApp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Application/IMachinePlayerFactory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Application/IPlayerFactory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Application/SinglePlayerGFactory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/Cell.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/IBoard.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/IGEngine.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/IGEngineFactory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/IGEngineStrategy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/IHistory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/gameEngineState/IGEState.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/player/IHumanPlayer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/player/IPlayer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/player/MachinePlayerStrategy/IMachinePlayerStrategy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Infrastructure/IUISubscriber.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Infrastructure/IVoice.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Infrastructure/NullVoic.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Infrastructure/SingleGameUISubscriber.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Infrastructure/Timer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/integration/removetest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/integration/removetest2.py" afterDir="false" />
-    </list>
+    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="first commit" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,6 +73,19 @@
       <option name="presentableId" value="Default" />
       <updated>1762557631027</updated>
     </task>
+    <task id="LOCAL-00001" summary="first commit">
+      <option name="closed" value="true" />
+      <created>1763051752100</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1763051752100</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
   </component>
 </project>
