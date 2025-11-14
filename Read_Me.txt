@@ -1,4 +1,8 @@
-One of the main challenges was finding a trade-off between ease of implementation and flexibility for future changes, such as modifying the board size, changing the machine-player algorithm, supporting two-player or even multiplayer/team-based games (including networked games using socket programming), adding a web-based backend, saving/retrieving game state, implementing a timer-based mode, adding a voice module, and so on.
+One of the main challenges was finding a trade-off between ease of implementation and flexibility
+for future changes, such as modifying the board size, changing the machine-player algorithm,
+supporting two-player or even multiplayer/team-based games 
+(including networked games using socket programming), adding a web-based backend, 
+saving/retrieving game state, implementing a timer-based mode, adding a voice module, and so on.
 
 The Strategy design pattern is used for both the *machinePlayer* and *gameWinner* algorithms because:
 
@@ -13,4 +17,5 @@ While singletons are generally not ideal for maintainability, they are used here
 The Observer design pattern is used to ensure loose coupling between components, so that adding future modules—such as networking, voice support, timers, etc.—will not require modifying existing classes.
 
 Due to time limitations, unit and integration tests have not been fully implemented. A sample test is included for one module where bugs occurred during development.
+
 
