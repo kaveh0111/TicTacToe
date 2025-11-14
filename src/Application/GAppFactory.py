@@ -1,6 +1,6 @@
 """It is an factory Interface for making the game, so it should be implmented in a child class
 
-it should return GameApp?
+it should return IGameApp
 It contains the parametrs used by the game engine and loading the UI
 User account maangement and any other things may be added in the future
 """
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from typing import Generic, Protocol, TypeVar, Optional
-
+from GameApp import GameApp
 
 # ---- Core domain protocols (no concrete implementations here) ----
 

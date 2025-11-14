@@ -3,6 +3,7 @@
 
 import tkinter as tk
 from tkinter import font, Label, StringVar, ttk, Button
+from tkinter.constants import DISABLED
 from typing import List
 
 
@@ -46,22 +47,27 @@ class tictactoe(tk.Tk):
         self.makeGrid()
 
     def disableButtons(self):
+        print("I am called when a move is accepted")
         for btn in self.__buttons:
             btn.configure(state="disabled")
 
     def on_mouse_enter(self, event):
-        event.widget.configure(bg="lightgreen")
+        #event.widget.configure(bg="lightgreen")
+        pass
 
     def on_mouse_leave(self, event):
-        event.widget.configure(bg="red")
+        pass
+        #event.widget.configure(bg="red")
 
     def on_click(self, row: int, col: int):
-        print("The button is clicked")
+        print("The button is clicked with row", row)
+        print("I am going to call engine to check if it is a valid move or not")
         #it should call app layer function
 
 
 
-    def cellMarked(row: int, col: int):
+    def cellMarked(self, row: int, col: int):
+        self.__buttons[row][col].configure(state=DISABLED)
         print("The cell is marked")
         #event.widget.configure(state = tk.DISABLED)
 
@@ -107,6 +113,13 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
+    #it first calls the player factory (IPlayerFacotory) to get an instance of IPlayer for the current user
+    #it calls the UI Factory to generate a UI for the game
+    #Then it will run the UI
+    # it should run the application factory (IGFactory) based on the parameters coming form user
+    #The application factory will return an object of IGameApp class
+    #finaly set(IGameApp) the application factory to the gui.
+
     window = tictactoe()
     window.geometry("650x650")
     window.mainloop()

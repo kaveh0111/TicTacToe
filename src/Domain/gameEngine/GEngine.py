@@ -1,5 +1,5 @@
 """
-It is initiated by IGEngineFactory.py(its implmented class)
+It is initiated by GEngineFactory.py(its implmented class)
 gameengine contains players, turning strategy, board (and cells inside it), winier checking,
 move validation, a list of subcribers (UIs, voice, etc.)
 
