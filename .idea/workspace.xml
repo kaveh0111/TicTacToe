@@ -4,30 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="first commit">
-      <change afterPath="$PROJECT_DIR$/src/Application/GameApp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEObserver.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Domain/player/HumanPlayerFactory.py" afterDir="false" />
+    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="second commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/IGFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GAppFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/IGameApp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/IMachinePlayerFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/MachinePlayerFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/IPlayerFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/player/MachinePlayerFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/Cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/Cell.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/IBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/Board.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/IGEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/IGEngineFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngineFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/IGEngineStrategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/player/machineplayerstrategy/MachinePlayerStrategy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/IHistory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/MoveHistory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/player/IHumanPlayer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/player/IPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/player/Player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/player/MachinePlayerStrategy/IMachinePlayerStrategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Configuration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Infrastructure/IUISubscriber.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Logging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Infrastructure/IVoice.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Voice.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Infrastructure/NullVoic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/NullVoic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Infrastructure/SingleGameUISubscriber.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/SingleGameUISubscriber.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Timer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Timer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/player/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/player/Player.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +54,7 @@
     "Python.Cell.executor": "Run",
     "Python.Configuration.executor": "Run",
     "Python.GEObserver.executor": "Run",
+    "Python.GEngine.executor": "Run",
     "Python.GameApp.executor": "Run",
     "Python.GameEngine.executor": "Run",
     "Python.IGEngine.executor": "Run",
@@ -132,7 +113,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763051835274</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="second commit">
+      <option name="closed" value="true" />
+      <created>1763161557128</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1763161557128</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -148,6 +137,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
+    <MESSAGE value="second commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="second commit" />
   </component>
 </project>

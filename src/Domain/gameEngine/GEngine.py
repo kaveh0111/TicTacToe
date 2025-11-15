@@ -22,6 +22,18 @@ delete everything to prepare for the next
 
 """
 
+# Domain - Board & Cell
+from Domain.gameEngine.Board import Board
+from Domain.gameEngine.Cell import Cell
+
+from Domain.player.Player import Player
+
+# Domain - Strategy interface for machine players
+from Domain.player.machineplayerstrategy.MachinePlayerStrategy import *
+
+# Domain - Observer interface (UI/voice/logging subscribers implement this)
+#from Domain.gameEngine.GEObserver import GEObserver
+
 
 
 
