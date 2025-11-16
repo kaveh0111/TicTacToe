@@ -43,20 +43,19 @@ class GameEngine(ABC):
     """Abstract game engine with lifecycle methods."""
 
     @abstractmethod
-    def start(self) -> None:
-        """Begin or resume the game."""
+    def acceptMove(self, row:int, row:col) -> bool:
+        """if the move is accepted, return True"""
         raise NotImplementedError
 
     @abstractmethod
-    def pause(self) -> None:
+    def isGameFinished(self) -> bool:
         """Pause the game."""
         raise NotImplementedError
 
     @abstractmethod
     def finish(self) -> None:
         """
-        change the game over variable to true
-        End the game and perform any cleanup."""
+        clear the game board."""
         raise NotImplementedError
 
     @abstractmethod

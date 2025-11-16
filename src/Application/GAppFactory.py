@@ -7,8 +7,6 @@ User account maangement and any other things may be added in the future
 
 
 
-
-
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

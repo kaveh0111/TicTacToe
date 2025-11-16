@@ -1,0 +1,33 @@
+from abc import ABC
+from events import GameEvent
+from typing import Callable, Dict, List, Type
+
+# A handler is simply: function(EventSubclass) -> None
+EventHandler = Callable[[GameEvent], None]
+
+
+class Observer:
+    def __init__(self) -> None:
+        # map: EventClass -> list of handlers
+        self._handlers: Dict[Type[GameEvent], List[EventHandler]] = {}
+
+    def subscribe(self, event_type: Type[GameEvent], handler: EventHandler) -> None:
+        """Subscribe handler to a specific Event subclass."""
+        self._handlers.setdefault(event_type, []).append(handler)
+
+    def unsubscribe(self, event_type: Type[GameEvent], handler: EventHandler) -> None:
+        handlers = self._handlers.get(event_type, [])
+        if handler in handlers:
+            handlers.remove(handler)
+
+    def notify(self, event: GameEvent) -> None:
+        """Call only handlers registered for this event's class."""
+        handlers = self._handlers.get(type(event), [])
+        for call_back in handlers:
+            call_back(event)
+
+
+
+
+
+

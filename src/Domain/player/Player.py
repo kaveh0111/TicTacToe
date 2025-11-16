@@ -28,7 +28,7 @@ class Player(ABC):
         self.__player_sign = player_sign
 
     @abstractmethod
-    def play(self, board: Board = None) -> Tuple[int, int]:
+    def play(self, board: Board) -> Tuple[int, int]:
         ...
 
     @abstractmethod
@@ -44,9 +44,9 @@ class HumanPlayer(Player):
     def __init__(self, name: str, player_sign: PlayerSign) -> None:
         # pass player_sign correctly to base (fixes bug #1)
         super().__init__(name, player_sign)
-        self._player_type = PlayerType.HUMAN
+        self.__player_type = PlayerType.HUMAN
 
-    def play(self, board: Board = None) -> Tuple[int, int]:
+    def play(self, board: Board) -> Tuple[int, int]:
         # now returns a Tuple[int, int] (fixes bug #4)
         print(f"{self.name} (human) plays their move.")
         # TODO: replace with actual input/UI. Dummy move for now:
@@ -54,7 +54,7 @@ class HumanPlayer(Player):
 
     def getPlayerType(self) -> PlayerType:
         # uses the existing attribute (fixes bug #3)
-        return self._player_type
+        return self.__player_type
 
 
 class MachinePlayer(Player):
@@ -62,20 +62,24 @@ class MachinePlayer(Player):
         self,
         name: str,
         player_sign: PlayerSign,
-        strategy: MachinePlayerStrategy = None,
-    ) -> None:
+        strategy: MachinePlayerStrategy = None) -> None:
         # pass player_sign correctly to base (fixes bug #1)
         super().__init__(name, player_sign)
-        self._player_type = PlayerType.COMPUTER
-        self.__strategy = strategy if strategy is not None else RandomPlayerStrategy()
+        self.__player_type = PlayerType.COMPUTER
+        if strategy is None:
+            strategy = RandomPlayerStrategy(self)
+            print("MachinePlayer, RandomPlayerStrategy Strategy created")
 
-    def play(self, board: Board = None) -> Tuple[int, int]:
+    def play(self, board: Board) -> Tuple[int, int]:
+        if board is None:
+            # Programming error: caller violated the contract
+            raise ValueError("MachinePlayerStrategy: board must not be None")
         return_tuple = self.__strategy.play(board)
         print(f"{self.name} (CPU) calculates and plays a move.")
         return return_tuple
 
     def getPlayerType(self) -> PlayerType:
-        return self._player_type
+        return self.__player_type
 
 
 if __name__ == "__main__":
@@ -85,5 +89,5 @@ if __name__ == "__main__":
         MachinePlayer("HAL", PlayerSign.O),
     ]
     for p in players:
-        move = p.play()
+        move = p.play(None)
         print(f"{p.name} played: {move}")

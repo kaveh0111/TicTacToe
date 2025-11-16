@@ -1,7 +1,7 @@
 """
 It is an application. its work is to run the gameengine
 it checks a move is acceptable
-It is a bridge between game engine and UI
+It is a bridge between game engine and UI or
 One of its duties are to check if a move is acceptable(based on
             users turns, cell avalibility, row and column range, etc.)
 """
@@ -10,6 +10,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from Domain.player.Player import Player
 from Domain.gameEngine.GEngine import GameEngine
+from typing import List
 
 class GameType(Enum):
     SINGLE_PLAYER = 1
@@ -18,11 +19,11 @@ class GameType(Enum):
 
 class GameApp(ABC):
     """Abstract base class for application"""
-    def __init__(self, game_engine : GameEngine) -> None:
+    def __init__(self, game_engine : GameEngine, player_list : List[Player]) -> None:
 
     @abstractmethod
     def moveFromUser(self, player: Player, row : int, column : int) -> None:
-        #check if move is legit
+        #check if move is legit users turn and empty cell
         #then send it to the game_engine
         raise NotImplementedError
 

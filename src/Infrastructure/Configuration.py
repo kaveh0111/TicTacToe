@@ -13,8 +13,12 @@ from typing import Final
 
 @dataclass(frozen=True)
 class GameSettings:
-    board_row_num: int = 3
-    board_col_num: int = 3
+    default_row_size: int = 3
+    default_col_size: int = 3
+    min_row_size: int = 3
+    min_col_size: int = 3
+    max_row_size: int = 3
+    max_col_size: int = 3
 
 
 SETTINGS: Final[GameSettings] = GameSettings()

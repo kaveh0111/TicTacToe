@@ -4,7 +4,9 @@
 import tkinter as tk
 from tkinter import font, Label, StringVar, ttk, Button
 from tkinter.constants import DISABLED
-from typing import List
+from typing import List, Tuple
+
+#from PyQt6.QtCore.QProcess import state
 
 
 #This class is responsibe for UI
@@ -29,22 +31,44 @@ class tictactoe(tk.Tk):
         button_frame = tk.Frame(self)
         button_frame.pack(side="top", pady=8)
 
+        #drawDropDown menu
+        self.__game_rows_options : Tuple[str] = ("3", "4", "5", "6", "7", "8", "9")
+        self.__game_cols_options : Tuple[str] = ("3", "4", "5", "6", "7", "8", "9")
+        self.__selected_game_row : tk.StringVar = tk.StringVar(self)
+        self.__selected_game_row.set(self.__game_rows_options[0])
+        self.__selected_game_col : tk.StringVar = tk.StringVar(self)
+        self.__selected_game_col.set(self.__game_cols_options[0])
+
+        board_size_label = tk.Label(button_frame, text="Board size:")
+        board_size_label.pack(side="left", padx=5)
+
+        self.__game_rows_drop_down = tk.OptionMenu(button_frame, self.__selected_game_row, *self.__game_rows_options)
+        self.__game_rows_drop_down.pack(side="left", padx=2)
+        self.__game_cols_drop_down = tk.OptionMenu(button_frame, self.__selected_game_col, *self.__game_cols_options)
+        self.__game_cols_drop_down.pack(side="left", padx=2)
+
+        #for i in range(1,9):
+        for idx in range(1, len(self.__game_cols_options)):
+            self.__game_cols_drop_down["menu"].entryconfig(idx, state=tk.DISABLED)
+            self.__game_rows_drop_down["menu"].entryconfig(idx, state=tk.DISABLED)
+
         #button = tk.Button(self, text="Start")
         button = tk.Button(button_frame, text="Start")
-        button.pack(side="left", pady=12)
-        button = tk.Button(button_frame, text="Pause")
-        button.pack(side="left", pady=22)
-        button = tk.Button(button_frame, text="Finish")
-        button.pack(side="left", pady=32)
+        button.pack(side="left", padx=4, pady=4)
+        #button = tk.Button(button_frame, text="Pause")
+        #button.pack(side="left", padx=4)
+        button = tk.Button(button_frame, text="Restart")
+        button.pack(side="left", padx=4)
 
         #txt_box = tk.Entry(self, width=10, relief=tk.SUNKEN, borderwidth=5)
-        label_text = StringVar()
-        label_text.set("hiiiiiiii")
-        txt_box = Label(self, textvariable = label_text)
-        txt_box.pack(side="left", pady=120)
+
         self.board = tk.Frame(self)
         self.board.pack(side="top", pady=8)
         self.makeGrid()
+
+    def startGame(self):
+        #call gameApp for building game
+        pass
 
     def disableButtons(self):
         print("I am called when a move is accepted")

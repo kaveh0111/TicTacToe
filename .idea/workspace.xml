@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="second commit">
+    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="updating player and gameengine 1">
+      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/events.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/observer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/GAppFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GAppFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/GameApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GameApp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/player/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/player/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Configuration.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +70,9 @@
     "Python.MachinePlayerFactory.executor": "Run",
     "Python.MachinePlayerStrategy.executor": "Run",
     "Python.Player.executor": "Run",
+    "Python.events.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.observer.executor": "Run",
     "Python.removetest.executor": "Run",
     "Python.removetest2.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -121,7 +129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763161557128</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="updating player and gameengine 1">
+      <option name="closed" value="true" />
+      <created>1763222363954</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1763222363954</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -138,6 +154,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
     <MESSAGE value="second commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="second commit" />
+    <MESSAGE value="updating player and gameengine 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="updating player and gameengine 1" />
   </component>
 </project>
