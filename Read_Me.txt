@@ -16,6 +16,9 @@ While singletons are generally not ideal for maintainability, they are used here
 
 The Observer design pattern is used to ensure loose coupling between components, so that adding future modules—such as networking, voice support, timers, etc.—will not require modifying existing classes.
 
+Since there are limited states on GameEngine, using State Desgin pattern may increases the code boilerplate, so simple switch/case or if/else is engough.
+
 Due to time limitations, unit and integration tests have not been fully implemented. A sample test is included for one module where bugs occurred during development.
+
 
 
