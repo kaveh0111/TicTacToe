@@ -3,33 +3,42 @@ based on its shape and size it is initiated and used by the game engine
 """
 from typing import List
 
-from .Cell import Cell
+from Domain.gameEngine.Cell import Cell
 
 class Board:
 
-    def __init__(self, num_col:int, num_row:int):
-        self._num_col = num_col
-        self._num_row = num_row
-        self._grid: List[List[Cell]] = []
+        def __init__(self, num_col:int, num_row:int):
+            if num_col is None or num_row is None:
+                raise TypeError("Board must have num_col and num_row")
+            if num_col < 0 or num_row < 0:
+                raise IndexError("Board: row and/or column out of range with row=",num_row, ", and column=" , num_col)
 
-        for i in range(self._num_col):
-            row: List[Cell] = []
-            for j in range(self._num_row):
-                row.append(Cell(__col=i, __row=j))
-            self._grid.append(row)
+            self._num_col = num_col
+            self._num_row = num_row
+            self._grid: List[List[Cell]] = []
 
+            for i in range(self._num_col):
+                row: List[Cell] = []
+                for j in range(self._num_row):
+                    row.append(Cell())
+                self._grid.append(row)
 
-        def selectCell(column: int, row: int):
-            if (0 >= column) and (column > self._num_col):
-                raise IndexError("Board: column out of range for selected cell")
-            if (0 >= row) and (row > self._num_row):
-                raise IndexError("Board: row out of range for selected cell")
-            self._grid[column][row].is_selected = True
+        def _validate_coordinates(self, column: int, row: int) -> None:
+            """Raise IndexError if (column, row) is out of bounds."""
+            if not (0 <= column < self._num_col):
+                raise IndexError("Board: column out of range")
+            if not (0 <= row < self._num_row):
+                raise IndexError("Board: row out of range")
 
-        def unSelectCell(column: int, row: int):
-            if (0 >= column) and (column > self._num_col):
-                raise IndexError("Board: column out of range for Unselected cell")
-            if (0 >= row) and (row > self._num_row):
-                raise IndexError("Board: row out of range for  Unselected cell")
+        def selectCell(self, column: int, row: int, player_id : str):
+            self._validate_coordinates(column, row)
+            self._grid[column][row].select_cell(player_id)
+
+        def unSelectCell(self, column: int, row: int):
+            self._validate_coordinates(column, row)
             self._grid[column][row].is_selected = False
+
+        def isEmptyCell(self, column: int, row: int)->bool:
+            self._validate_coordinates(column, row)
+            return self._grid[column][row].is_empty
 

@@ -1,5 +1,5 @@
 from abc import ABC
-from events import GameEvent
+from Domain.gameEngine.events import GameEvent
 from typing import Callable, Dict, List, Type
 
 # A handler is simply: function(EventSubclass) -> None
@@ -15,7 +15,7 @@ class Observer:
         """Subscribe handler to a specific Event subclass."""
         self._handlers.setdefault(event_type, []).append(handler)
 
-    def unsubscribe(self, event_type: Type[GameEvent], handler: EventHandler) -> None:
+    def unSubscribe(self, event_type: Type[GameEvent], handler: EventHandler) -> None:
         handlers = self._handlers.get(event_type, [])
         if handler in handlers:
             handlers.remove(handler)

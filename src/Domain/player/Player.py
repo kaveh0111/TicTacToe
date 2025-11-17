@@ -22,8 +22,14 @@ class PlayerSign(Enum):
 
 
 class Player(ABC):
+    _next_id: int = 0   # <--- class-level counter shared by all players
+
     def __init__(self, name: str, player_sign: PlayerSign) -> None:
-        # store both name and sign (fixes bug #5)
+        # unique id per Player instance
+        self._player_id = Player._next_id
+        Player._next_id += 1
+
+        # existing fields
         self.name = name
         self.__player_sign = player_sign
 
@@ -38,6 +44,11 @@ class Player(ABC):
     @property
     def getPlayerSign(self) -> PlayerSign:
         return self.__player_sign
+
+    @property
+    def player_id(self) -> int:
+        """Read-only unique id for this player."""
+        return self._player_id
 
 
 class HumanPlayer(Player):
@@ -74,7 +85,7 @@ class MachinePlayer(Player):
         if board is None:
             # Programming error: caller violated the contract
             raise ValueError("MachinePlayerStrategy: board must not be None")
-        return_tuple = self.__strategy.play(board)
+        return_tuple : Tuple[int, int] = self.__strategy.play(board)
         print(f"{self.name} (CPU) calculates and plays a move.")
         return return_tuple
 
