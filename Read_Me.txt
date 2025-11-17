@@ -8,7 +8,7 @@ The Strategy design pattern is used for both the *machinePlayer* and *gameWinner
 
 1. It allows the algorithm to be changed easily, even at runtime, through polymorphism.
 2. Adding new algorithms in the future becomes simpler.
-3. For games with large board sizes, the main performance bottlenecks are often the *machinePlayer* and/or *gameWinner* modules. To keep the game responsive, multithreading (thread pools) and/or asynchronous programming may be required for these components.
+3. For games with large board sizes, the main performance bottlenecks are often the *machinePlayer* and/or *gameWinner* modules. To keep the game responsive, multithreading (thread pools) and/or asynchronous programming may be required for these components. Using strategy makes it easier in future to modify the architecture and add multithreading.
 
 To achieve loose coupling, ease of unit testing and maintenance, and runtime polymorphism, abstract base (interface) classes are used together with dependency injection (DI). Because the game is not very complex at this stage, adding a full DI framework would slow down development and reduce readability (both for myself and for other developers). Therefore, I used the Factory Method to create objects for each class, and applied constructor-based DI to minimize the chance of bugs, while still allowing dependencies to be changed at runtime through getter/setter methods.
 
@@ -22,6 +22,7 @@ Due to time limitations, unit and integration tests have not been implemented.
 
 variables, functions and class names requires more consideration to increase the readability.
 There are some inconsistency between modules that are the result of changing architecture mid implmentation that due to time shortage there is not enough time to fix them.
+
 
 
 
