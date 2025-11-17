@@ -28,7 +28,7 @@ from Domain.gameEngine.Cell import Cell
 from Domain.gameEngine.observer import Observer
 from Domain.gameEngine.events import GameEvent, TurnChanged
 from Domain.player.Player import Player, PlayerType
-
+from Domain.gameEngine.GameStatusChecker import GameStatusChecker, TicTacToeGameStatusChecker
 # Domain - Strategy interface for machine players
 from Domain.player.machineplayerstrategy.MachinePlayerStrategy import *
 from typing import Optional, Tuple
@@ -62,13 +62,17 @@ class GameEngine(ABC):
     def __init__(self, board: Board,
                  player_list : List[Player],
                  observer : Observer,
-                 turn_strategy : TurnStrategy = None) -> None:
+                 turn_strategy : TurnStrategy = None,
+                 status_checker: GameStatusChecker = None) -> None:
 
         if player_list is None:
             raise ValueError("GameEngine: player_list is None")
         if len(player_list) < 2:
             raise ValueError("TurnStrategy: player_list has less than 2 elements")
 
+        self._game_checker = status_checker
+        if self._game_checker is None:
+            self._game_checker = TicTacToeGameStatusChecker()
         self._turn_strategy = turn_strategy
         if self._turn_strategy is None:
             self._turn_strategy = TurnStrategy()
@@ -83,6 +87,8 @@ class GameEngine(ABC):
         self._current_turn : Player = self._turn_strategy.getNextTurn(self._player_list)
         self._board: Board = board
         self._observer: Observer = observer
+        self._winner : Optional[Player] = None
+        self._winner_line = None
 
     @abstractmethod
     def setObserver(self, observer: Observer) -> None:
@@ -147,7 +153,6 @@ class GameEngine(ABC):
 
 
 
-
 class GameEngineImp(GameEngine):
     """Abstract game engine with lifecycle methods."""
     def __init__(self):
@@ -183,6 +188,7 @@ class GameEngineImp(GameEngine):
 
     def acceptMove(self, row:int, col:int, player : Player) -> bool:
         if not self._board.isEmptyCell(col, row):
+            print("GameEngineImp, the cell is full")
             return False
         self._board.selectCell(row, col, str(player.player_id))
         #self.inform()
@@ -200,16 +206,20 @@ class GameEngineImp(GameEngine):
         raise NotImplementedError
 
     def finish(self) -> None:
-        """
-        clear the game board."""
-        raise NotImplementedError
+        self._game_state = GameStatus.FINISHED
 
-    def getNextMove(self) -> None:
+    def check_finish():
+        #implment checking algorithm
+        #call gamestatuschecker to get the result
+        #if it is not None, inform the result to other throgh observer
+        self._game_checker.check_finish()
+
+    def getMachineMove(self) -> Tuple[int, int]:
         """the machine player will wait for the move from machine user."""
         if not (self._current_turn.getPlayerType() is PlayerType.COMPUTER):
             raise ValueError("Current turn player is not the computer player turn")
 
-        self._current_turn.play(self._board)
+        return self._current_turn.play(self._board)
 
 
         raise NotImplementedError

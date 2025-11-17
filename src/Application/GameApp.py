@@ -33,7 +33,7 @@ class GameApp(ABC):
 
 
     @abstractmethod
-    def moveFromUser(self, player: Player, row : int, column : int) -> None:
+    def executeMove(self, player: Player, row : int, column : int) -> None:
         #check if move is legit users turn and empty cell
         #then send it to the game_engine
         raise NotImplementedError
@@ -94,15 +94,16 @@ class GameAppSinglePlayer(GameApp):
         raise NotImplementedError
 
 
-    def moveFromUser(self, player: Player, row : int, column : int) -> None:
+    def executeMove(self, player: Player, row : int, column : int) -> None:
         self.isGamePlayer(player)
-        if player is self._machine_player:
-            raise AttributeError("GameAppSinglePlayer Error: The machine player cannot work as a human player")
+        #if player is self._machine_player:
+        #    raise AttributeError("GameAppSinglePlayer Error: The machine player cannot work as a human player")
         if not player is self._turn:
             return
         print("sending the move to the game engine")
         self._game_engine.acceptMove(row, column, player)
-        self._game_engine.
+        self._game_engine.check_finish()
+        self._game_engine.changeTurn()
 
 
 

@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="adding observer and changing gameApp, adding dorpdown menu to the interface">
+      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GameStatusChecker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Application/GameApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GameApp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/Board.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/Cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/Cell.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/observer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/observer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/player/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/player/Player.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +58,7 @@
     "Python.GEngine.executor": "Run",
     "Python.GameApp.executor": "Run",
     "Python.GameEngine.executor": "Run",
+    "Python.GameStatusChecker.executor": "Run",
     "Python.IGEngine.executor": "Run",
     "Python.IGameFactory.executor": "Run",
     "Python.IHumanPlayer.executor": "Run",
@@ -143,7 +141,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763261354755</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="adding observer and changing gameApp, adding dorpdown menu to the interface">
+      <option name="closed" value="true" />
+      <created>1763357971526</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1763357971526</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
