@@ -18,7 +18,11 @@ The Observer design pattern is used to ensure loose coupling between components,
 
 Since there are limited states on GameEngine, using State Desgin pattern may increases the code boilerplate, so simple switch/case or if/else is engough.
 
-Due to time limitations, unit and integration tests have not been fully implemented. A sample test is included for one module where bugs occurred during development.
+Due to time limitations, unit and integration tests have not been implemented. 
+
+variables, functions and class names requires more consideration to increase the readability.
+There are some inconsistency between modules that are the result of changing architecture mid implmentation that due to time shortage there is not enough time to fix them.
+
 
 
 
