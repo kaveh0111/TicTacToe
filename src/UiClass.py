@@ -23,16 +23,15 @@ class tictactoe(tk.Tk):
         super().__init__()
         self.__grid_width: int = grid_column_size
         self.__grid_height: int = grid_row_size
-        if not application:
-            raise ValueError("tictactoe: an application must be provided")
+
         self._app : GameApp = None
-        self._observer: Observer = self._app.getObserver()
+        self._observer: Observer = None
         if self._app is None:
             warnings.warn(
                 "UI: It requires to inject the gameApp later in a Factory.",
                 UserWarning)
 
-        self.subscribeToObserver()
+
 
         self.title("TicTacToe")
         text = self.__default_text = "."
@@ -81,6 +80,8 @@ class tictactoe(tk.Tk):
 
     def setGameApp(self, new_app: GameApp):
         self._app = new_app
+        self._observer: Observer = self._app.getObserver()
+        self.subscribeToObserver()
 
     def subscribeToObserver(self):
         #this is called by the constructor

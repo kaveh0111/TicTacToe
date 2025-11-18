@@ -23,7 +23,7 @@ class GameEngineFactory:
     def getNewGameEngine(self) -> GameEngine:
         board: Board = Board(num_row=self._row_size, num_col=self._col_size)
         game_engine_observer: Observer = Observer()
-        game_engine : GameEngine = GameEngineImp(board = board,
-                                                    player_list = self._player_list,
-                                                    observer = game_engine_observer)
+        game_engine : GameEngine = GameEngineImp( board,
+                                                    self._player_list,
+                                                    game_engine_observer)
         return game_engine

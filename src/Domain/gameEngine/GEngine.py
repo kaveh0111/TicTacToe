@@ -18,7 +18,8 @@ from Domain.player.Player import Player, PlayerType
 from Domain.gameEngine.GameStatusChecker import GameStatusChecker, TicTacToeGameStatusChecker, GameResult
 # Domain - Strategy interface for machine players
 from Domain.player.machineplayerstrategy.MachinePlayerStrategy import *
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
+from Domain.gameEngine.Board import Board
 # Domain - Observer interface (UI/voice/logging subscribers implement this)
 #from Domain.gameEngine.GEObserver import GEObserver
 from enum import Enum
@@ -93,6 +94,7 @@ class GameEngine(ABC):
     def getObserver(self) -> Optional[Observer]:
         raise NotImplementedError
 
+    @abstractmethod
     def setBoard(self, board:Board) -> None:
         raise NotImplementedError
 
@@ -103,15 +105,15 @@ class GameEngine(ABC):
 
     @abstractmethod
     def acceptMove(self, row:int, col:int, player : Player) -> bool:
-        """if the move is accepted, return row and col else return None"""
+        """if the move is accepted"""
         raise NotImplementedError
 
-    """
+
     @abstractmethod
     def isGameFinished(self) -> bool:
         #Pause the game.
         raise NotImplementedError
-
+    """
     def getWinner(self) -> Optional[Player]:
         #first check if the game is finished, then return None or the player game
         raise NotImplementedError
@@ -122,25 +124,19 @@ class GameEngine(ABC):
         #clear the game board.
         raise NotImplementedError
     """
-    @abstractmethod
-    def getNextMove(self) -> None:
-        """HERE IT NEEDS TO INDICATE TEH PARAMETERS OF THE MOVE."""
-        """THE human palyers will wait for the input from the user.
-        the machine palyer will wait for the move from machine user."""
-        raise NotImplementedError
 
     @abstractmethod
     def changeTurn(self) -> None:
         """It will change the turn to another player."""
         raise NotImplementedError
-
+    """
     @abstractmethod
     def addObserver(self, observer : Observer) -> None:
         #accept the observer class for notifications
         raise NotImplementedError
-
+    """
     @abstractmethod
-    def inform(self, envent: GameEvent) -> None:
+    def inform(self, event: GameEvent) -> None:
         raise NotImplementedError
 
 
@@ -150,10 +146,15 @@ class GameEngine(ABC):
 
 
 class GameEngineImp(GameEngine):
-    """Abstract game engine with lifecycle methods."""
-    def __init__(self):
-        super().__init__()
-        self._game_state : GameStatus = GameStatus.PLAYING
+    """Abstract game engine ."""
+    def __init__(self,
+                 board: Board,
+                 player_list: List[Player],
+                 observer: Observer,
+                 turn_strategy: TurnStrategy = None,
+                 status_checker: GameStatusChecker = None):
+        super().__init__(board, player_list, observer, turn_strategy, status_checker)
+        self._game_state = GameStatus.PLAYING
 
     def setObserver(self, observer: Observer) -> None:
         if observer is None:
@@ -183,11 +184,19 @@ class GameEngineImp(GameEngine):
 
 
     def acceptMove(self, row:int, col:int, player : Player) -> bool:
-        if not self._board.isEmptyCell(col, row):
+        if not self._board.isEmptyCell(row, col):
             print("GameEngineImp, the cell is full")
             return False
         self._board.selectCell(row, col, str(player.player_id))
         #self.inform()
+        self._observer.notify(
+            MoveMade(
+                player=str(player.player_id),
+                row=row,
+                col=col,
+                board_snapshot=snapshot
+            )
+        )
         return True
 
 

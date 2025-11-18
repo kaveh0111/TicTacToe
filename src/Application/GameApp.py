@@ -220,6 +220,13 @@ class GameAppSinglePlayer(GameApp):
             raise AttributeError("GameAppSinglePlayer: Player is not in current player list")
         return True
 
+    def changeMachinePlayerStrategy(self, player: Player, new_strategy : MachinePlayerStrategy) -> None:
+        #change the strategy of the machine player to change the dificulity levels of a single game etc.
+        print("change the machine player strategy is not implmented yet")
+
+
+
+
 
     """
     def changeTurn(self, player: Player) -> None:

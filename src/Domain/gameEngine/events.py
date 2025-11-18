@@ -11,7 +11,7 @@ from dataclasses import dataclass
 class GameEvent:
     pass
 
-dataclass
+@dataclass
 class GameFinished(GameEvent):
     winner_id: Optional[str]
     winning_cells: List[Tuple[int, int]]

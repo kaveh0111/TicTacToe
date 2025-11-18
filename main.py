@@ -14,7 +14,7 @@ if __name__ == '__main__':
     #The application factory will return an object of IGameApp class
     #finaly set(IGameApp) the application factory to the gui.
     window = tictactoe()
-    application : GameApp = GameAppBuilder()
+    application : GameApp = GameAppBuilder().getNewGameApp()
     window.setGameApp(application)
 
     window.geometry("650x650")
