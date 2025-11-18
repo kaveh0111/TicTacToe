@@ -36,15 +36,18 @@ class GameAppBuilder:
     Subclasses provide the concrete factories by implementing the abstract
     factory properties below.
     """
-
-    # --- Factories to be supplied by subclasses ---
+    def __init__(self):
+        self._human_player: Optional[HumanPlayer] = None
+        self._machine_player: Optional[MachinePlayer] = None
+        self._game_app: Optional[GameApp] = None
 
     # --- Internal state (populated by the template methods below) ---
 
     def getNewGameApp(self) -> GameApp:
-        human_player : HumanPlayer = HumanPlayer( player_name="You")
-        machine_player : MachinePlayer = MachinePlayer(player_name="Computer")
-        players : List[Player] = [human_player, machine_player]
+        self._human_player = HumanPlayer(player_name="You")
+        self._machine_player = MachinePlayer(player_name="Computer")
+        players: List[Player] = [self._human_player, self._machine_player]
+
         game_engine : GameEngine = GameEngineFactory(players).getNewGameEngine()
         game_app: GameAppSinglePlayer = GameAppSinglePlayer(
             game_engine = game_engine,
@@ -55,6 +58,23 @@ class GameAppBuilder:
         Subclasses may override to change ordering or inject configuration.
         """
         return game_app
+
+    def get_human_player_name_id(self) -> tuple[str, int]:
+        """
+        Returns (name, id) for the human player created in getNewGameApp().
+        """
+        if self._human_player is None:
+            raise RuntimeError("GameAppBuilder: getNewGameApp() has not been called yet.")
+        # Accessing protected attributes to avoid changing the Player class.
+        return self._human_player.getPlayerName(), self._human_player.player_id()
+
+    def get_machine_player_name_id(self) -> tuple[str, int]:
+        """
+        Returns (name, id) for the machine player created in getNewGameApp().
+        """
+        if self._machine_player is None:
+            raise RuntimeError("GameAppBuilder: getNewGameApp() has not been called yet.")
+        return self._machine_player.getPlayerName(), self._machine_player.player_id()  # type: ignore[attr-defined]
 
 
 builder = GameAppBuilder().getNewGameApp()

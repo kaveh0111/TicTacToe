@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="before adding observer to THE gameapp">
+    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="backend is created, now the time for connecting UI to backend.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/GameApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GameApp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/Board.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngineFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngineFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/events.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UiClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/UiClass.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Application/GAppFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GAppFactory.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763495514411</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="backend is created, now the time for connecting UI to backend.">
+      <option name="closed" value="true" />
+      <created>1763501851622</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1763501851622</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -222,6 +224,7 @@
     <MESSAGE value="finishing game turn" />
     <MESSAGE value="before adding observer to gameapp" />
     <MESSAGE value="before adding observer to THE gameapp" />
-    <option name="LAST_COMMIT_MESSAGE" value="before adding observer to THE gameapp" />
+    <MESSAGE value="backend is created, now the time for connecting UI to backend." />
+    <option name="LAST_COMMIT_MESSAGE" value="backend is created, now the time for connecting UI to backend." />
   </component>
 </project>
