@@ -40,6 +40,16 @@ class tictactoe(tk.Tk):
         self.__turn: bool = True                            #Take the turning strategy
         self._cells = {}
         self.__buttons: List[List[tk.Button]] = []
+
+        self.__human_name_var: StringVar = StringVar(self, value="My name: ")
+        self.__machine_name_var: StringVar = StringVar(self, value="Machine name: ")
+        self.__current_turn_var: StringVar = StringVar(self, value="Current turn: ")
+
+        self._my_id : Optional[int] = None
+        self._my_name: str = ""
+        self._opponent_id : Optional[int] = None
+        self._opponent_name: str = ""
+
         button_frame = tk.Frame(self)
         button_frame.pack(side="top", pady=8)
 
@@ -72,11 +82,30 @@ class tictactoe(tk.Tk):
         button = tk.Button(button_frame, text="Restart")
         button.pack(side="left", padx=4)
 
+        info_frame = tk.Frame(self)
+        info_frame.pack(side="top", pady=4)
+
+        tk.Label(info_frame, textvariable=self.__human_name_var).pack(side="left", padx=8)
+        tk.Label(info_frame, textvariable=self.__machine_name_var).pack(side="left", padx=8)
+        tk.Label(info_frame, textvariable=self.__current_turn_var).pack(side="left", padx=8)
+
         #txt_box = tk.Entry(self, width=10, relief=tk.SUNKEN, borderwidth=5)
 
         self.board = tk.Frame(self)
         self.board.pack(side="top", pady=8)
         self.makeGrid()
+
+    def setMyPlayer(self, player_id: int, player_name: str) -> None:
+        self._my_id = player_id
+        self._my_name = player_name
+        # optional: keep the UI text in sync
+        self.__human_name_var.set(f"My name: {player_name}")
+
+    def setOpponent(self, player_id: int, player_name: str) -> None:
+        self._opponent_id = player_id
+        self._opponent_name = player_name
+        # optional: keep the UI text in sync
+        self.__machine_name_var.set(f"Machine name: {player_name}")
 
     def setGameApp(self, new_app: GameApp):
         self._app = new_app
