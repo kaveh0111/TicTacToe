@@ -12,18 +12,40 @@ from Domain.player.Player import Player, HumanPlayer, MachinePlayer
 from Domain.gameEngine.GEngine import GameEngine
 from Domain.gameEngine.events import GameEvent, TurnChanged
 from typing import List, Optional
+from AppObserver import Observer as AppObserver
+from typing import List, Optional
 from Domain.player.machineplayerstrategy.MachinePlayerStrategy import MachinePlayerStrategy
 class GameType(Enum):
     SINGLE_PLAYER = 1
     TWO_PLAYER = 2
 
+from typing import List, Optional
+from AppObserver import Observer as AppObserver   # <— your multi-subscriber observer
 
 class GameApp(ABC):
     """Abstract base class for application"""
-    def __init__(self, game_engine : GameEngine, player_list : List[Player]) -> None:
-        self._game_engine : GameEngine = game_engine
-        self._player_list : List[Player] = player_list
+    def __init__(
+        self,
+        game_engine: GameEngine,
+        player_list: List[Player],
+        app_observer: Optional[AppObserver] = None,   # <— NEW param (optional to not break existing code)
+    ) -> None:
+        self._game_engine: GameEngine = game_engine
+        self._player_list: List[Player] = player_list
         self._turn: Player = None
+
+        # store the dependency; if not provided, create a default one
+        self._observer: AppObserver = app_observer if app_observer is not None else AppObserver()
+
+
+
+
+    def getObserver(self) -> AppObserver:
+        """
+        Expose the application-level observer ot other modules
+        so they can subscribe/unsubscribe directly.
+        """
+        return self._observer
 
     @abstractmethod
     def changeMachinePlayerStrategy(self, player: Player, new_strategy : MachinePlayerStrategy) -> None:
@@ -53,20 +75,18 @@ class GameApp(ABC):
         #it give the result of the game done by one of the players (machine or other palyers in multiplayer games)
         #this function will call the client code GUI to update it (or later throw web API)
         raise NotImplementedError
-
+"""
     @abstractmethod
     def changeTurn(self, player: Player) -> None:
         #can be called with the callback from gameengine to change turn
         raise NotImplementedError
-
+"""
+"""
     @abstractmethod
     def onTurnChange(self, event: GameEvent) -> None:
         #callback for changing turns
         raise NotImplementedError
-
-    @abstractmethod
-    def onTurnChange(self, event: GameEvent) -> None:
-        raise NotImplementedError
+"""
 
 
 
@@ -84,7 +104,7 @@ class GameAppSinglePlayer(GameApp):
         self._human_player: Player = None
 
         # checking exactly one machine and one human player is created
-        if self._player_list is None:
+        if not self._player_list:
             raise AttributeError("GameApp: Player list is empty")
 
         for p in self._player_list:

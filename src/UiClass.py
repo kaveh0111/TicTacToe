@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import font, Label, StringVar, ttk, Button
 from tkinter.constants import DISABLED
 from typing import List, Tuple
+import warnings
+from Application.GameApp import GameApp
+
 
 #from PyQt6.QtCore.QProcess import state
 
@@ -14,10 +17,13 @@ from typing import List, Tuple
 
 
 class tictactoe(tk.Tk):
-    def __init__(self, grid_column_size=3, grid_row_size=3):
+    def __init__(self, grid_column_size=3, grid_row_size=3, application : GameApp):
         super().__init__()
         self.__grid_width: int = grid_column_size
         self.__grid_height: int = grid_row_size
+        self._app : GameApp = application
+        if self._app is None:
+            warnings.warn("UI: empty game app", UserWarning)
         self.title("TicTacToe")
         text = self.__default_text = "."
         width = self.__button_width = 12
