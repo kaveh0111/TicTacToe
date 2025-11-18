@@ -11,8 +11,9 @@ from enum import Enum
 from Domain.player.Player import Player, HumanPlayer, MachinePlayer
 from Domain.gameEngine.GEngine import GameEngine
 from Domain.gameEngine.events import GameEvent, TurnChanged
+from Domain.gameEngine.events import *
 from typing import List, Optional
-from AppObserver import Observer as AppObserver
+from Application.AppObserver import Observer as AppObserver
 from typing import List, Optional
 from Domain.player.machineplayerstrategy.MachinePlayerStrategy import MachinePlayerStrategy
 class GameType(Enum):
@@ -20,7 +21,7 @@ class GameType(Enum):
     TWO_PLAYER = 2
 
 from typing import List, Optional
-from AppObserver import Observer as AppObserver   # <— your multi-subscriber observer
+
 
 class GameApp(ABC):
     """Abstract base class for application"""
@@ -36,8 +37,13 @@ class GameApp(ABC):
 
         # store the dependency; if not provided, create a default one
         self._observer: AppObserver = app_observer if app_observer is not None else AppObserver()
-
-
+        self._observer.subscribe(GameStarted, self.onGameStarted)
+        self._observer.subscribe(MoveMade, self.onMoveMade)
+        self._observer.subscribe(TurnChanged, self.onTurnChangedEvent)
+        self._observer.subscribe(IlegalMove, self.onIlegalMove)
+        self._observer.subscribe(TimerDeadline, self.onTimerDeadline)
+        self._observer.subscribe(GameFinished, self.onGameFinished)
+        self._observer.subscribe(GameOver, self.onGameOver)
 
 
     def getObserver(self) -> AppObserver:
@@ -75,6 +81,45 @@ class GameApp(ABC):
         #it give the result of the game done by one of the players (machine or other palyers in multiplayer games)
         #this function will call the client code GUI to update it (or later throw web API)
         raise NotImplementedError
+
+    def onGameStarted(self, event: GameStarted) -> None:
+        """Hook for GameStarted events."""
+        pass
+
+    def onMoveMade(self, event: MoveMade) -> None:
+        """
+        Hook for MoveMade events.
+        Default: adapt to existing onMove(player, row, col).
+        """
+        player_obj = self.getPlayer(event.player)
+        if player_obj is not None:
+            self.onMove(player_obj, event.row, event.col)
+
+    def onTurnChangedEvent(self, event: TurnChanged) -> None:
+        """
+        Hook for TurnChanged events.
+        Default: if subclass defines onTurnChange(event), call it.
+        """
+        # We don't make onTurnChange abstract in base to avoid breaking subclasses.
+        handler = getattr(self, "onTurnChange", None)
+        if callable(handler):
+            handler(event)
+
+    def onIlegalMove(self, event: IlegalMove) -> None:
+        """Hook for IlegalMove events."""
+        pass
+
+    def onTimerDeadline(self, event: TimerDeadline) -> None:
+        """Hook for TimerDeadline events."""
+        pass
+
+    def onGameFinished(self, event: GameFinished) -> None:
+        """Hook for GameFinished events."""
+        pass
+
+    def onGameOver(self, event: GameOver) -> None:
+        """Hook for GameOver events."""
+        pass
 """
     @abstractmethod
     def changeTurn(self, player: Player) -> None:

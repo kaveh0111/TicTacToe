@@ -4,6 +4,8 @@ from tkinter.constants import DISABLED
 from typing import List, Tuple
 import warnings
 from Application.GameApp import GameApp
+from Application.AppObserver import Observer
+from Domain.gameEngine.events import *
 
 
 #from PyQt6.QtCore.QProcess import state
@@ -17,13 +19,21 @@ from Application.GameApp import GameApp
 
 
 class tictactoe(tk.Tk):
-    def __init__(self, grid_column_size=3, grid_row_size=3, application : GameApp):
+    def __init__(self, grid_column_size=3, grid_row_size=3):
         super().__init__()
         self.__grid_width: int = grid_column_size
         self.__grid_height: int = grid_row_size
-        self._app : GameApp = application
+        if not application:
+            raise ValueError("tictactoe: an application must be provided")
+        self._app : GameApp = None
+        self._observer: Observer = self._app.getObserver()
         if self._app is None:
-            warnings.warn("UI: empty game app", UserWarning)
+            warnings.warn(
+                "UI: It requires to inject the gameApp later in a Factory.",
+                UserWarning)
+
+        self.subscribeToObserver()
+
         self.title("TicTacToe")
         text = self.__default_text = "."
         width = self.__button_width = 12
@@ -68,6 +78,59 @@ class tictactoe(tk.Tk):
         self.board = tk.Frame(self)
         self.board.pack(side="top", pady=8)
         self.makeGrid()
+
+    def setGameApp(self, new_app: GameApp):
+        self._app = new_app
+
+    def subscribeToObserver(self):
+        #this is called by the constructor
+        #based on events and my callback functions subscribe to the observer
+        self._observer.subscribe(GameStarted, self.on_game_started)
+        self._observer.subscribe(MoveMade, self.on_move_made)
+        self._observer.subscribe(TurnChanged, self.on_turn_changed)
+        self._observer.subscribe(IlegalMove, self.on_ilegal_move)
+        self._observer.subscribe(TimerDeadline, self.on_timer_deadline)
+        self._observer.subscribe(GameFinished, self.on_game_finished)
+        self._observer.subscribe(GameOver, self.on_game_over)
+
+    def on_game_started(self, event: GameStarted) -> None:
+        # For now, just log. Later, you could resize grid, reset UI, etc.
+        print("UI: Game started, players:", event.player)
+
+    def on_move_made(self, event: MoveMade) -> None:
+        # Later you can update the specific button from board_snapshot.
+        # For now, just print; or you can call cellMarked if __buttons is properly filled.
+        print(f"UI: Move made by {event.player} at row={event.row}, col={event.col}")
+        # Example if you later wire __buttons correctly:
+        # self.cellMarked(event.row, event.col)
+
+    def on_turn_changed(self, event: TurnChanged) -> None:
+        # Adapt the event to your existing `turnChanged` method
+        self.turnChanged(event.current_player)
+
+    def on_ilegal_move(self, event: IlegalMove) -> None:
+        print(f"UI: Illegal move by {event.player} at row={event.row}, col={event.col}")
+        # later you can show a popup or status label here
+
+    def on_timer_deadline(self, event: TimerDeadline) -> None:
+        print(f"UI: Timer deadline for player {event.player}")
+        # later you might auto-move or forfeit etc.
+
+    def on_game_finished(self, event: GameFinished) -> None:
+        if event.winner_id is None:
+            print("UI: Game finished – draw")
+        else:
+            self.gameWon(event.winner_id)
+        # you may also want to disable input:
+        # self.disableButtons()
+
+    def on_game_over(self, event: GameOver) -> None:
+        if event.winner is None:
+            print("UI: Game over – draw")
+        else:
+            self.gameWon(event.winner)
+        # this is a good place to disable UI:
+        self.disableButtons()
 
     def startGame(self):
         #call gameApp for building game

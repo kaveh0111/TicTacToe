@@ -1,3 +1,5 @@
+from Application.GAppFactory import GameAppBuilder
+from Application.GameApp import GameApp
 from src.UiClass import tictactoe
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -11,8 +13,10 @@ if __name__ == '__main__':
     # IGFactory make a game based on the parameters coming form user in UI
     #The application factory will return an object of IGameApp class
     #finaly set(IGameApp) the application factory to the gui.
-
     window = tictactoe()
+    application : GameApp = GameAppBuilder()
+    window.setGameApp(application)
+
     window.geometry("650x650")
     window.mainloop()
 

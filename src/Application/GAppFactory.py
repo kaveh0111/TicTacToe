@@ -14,7 +14,7 @@ from typing import Generic, Protocol, TypeVar, Optional, List
 
 from Domain.gameEngine.GEngine import GameEngine
 from Domain.gameEngine.GEngineFactory import GameEngineFactory
-from GameApp import GameApp, GameAppSinglePlayer
+from Application.GameApp import GameApp, GameAppSinglePlayer
 from Domain.player.Player import Player, HumanPlayer, MachinePlayer
 
 
@@ -23,7 +23,7 @@ from Domain.player.Player import Player, HumanPlayer, MachinePlayer
 
 # ---- Abstract Builder ----
 
-class Builder:
+class GameAppBuilder:
     """
     Abstract builder that orchestrates creation and wiring via factories.
     Responsibilities:
@@ -42,8 +42,8 @@ class Builder:
     # --- Internal state (populated by the template methods below) ---
 
     def getNewGameApp(self) -> GameApp:
-        human_player : HumanPlayer = HumanPlayer(name="You")
-        machine_player : MachinePlayer = MachinePlayer(name="Computer")
+        human_player : HumanPlayer = HumanPlayer( player_name="You")
+        machine_player : MachinePlayer = MachinePlayer(player_name="Computer")
         players : List[Player] = [human_player, machine_player]
         game_engine : GameEngine = GameEngineFactory(players).getNewGameEngine()
         game_app: GameAppSinglePlayer = GameAppSinglePlayer(
@@ -57,4 +57,4 @@ class Builder:
         return game_app
 
 
-builder = Builder().getNewGameApp()
+builder = GameAppBuilder().getNewGameApp()

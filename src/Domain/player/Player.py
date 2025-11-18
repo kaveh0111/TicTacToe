@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Tuple
+from typing import Tuple, Optional
 from dataclasses import dataclass
 from Domain.gameEngine import Board
 
@@ -24,14 +24,13 @@ class PlayerSign(Enum):
 class Player(ABC):
     _next_id: int = 0   # <--- class-level counter shared by all players
 
-    def __init__(self, name: str, player_sign: PlayerSign) -> None:
+    def __init__(self, player_name: Optional[str]) -> None:
         # unique id per Player instance
         self._player_id = Player._next_id
         Player._next_id += 1
 
         # existing fields
-        self.name = name
-        self.__player_sign = player_sign
+        self._player_name = player_name
 
     @abstractmethod
     def play(self, board: Board) -> Tuple[int, int]:
@@ -42,8 +41,8 @@ class Player(ABC):
         ...
 
     @property
-    def getPlayerSign(self) -> PlayerSign:
-        return self.__player_sign
+    def getPlayerName(self) -> str:
+        return self._player_name
 
     @property
     def player_id(self) -> int:
@@ -52,14 +51,14 @@ class Player(ABC):
 
 
 class HumanPlayer(Player):
-    def __init__(self, name: str, player_sign: PlayerSign) -> None:
-        # pass player_sign correctly to base (fixes bug #1)
-        super().__init__(name, player_sign)
+    def __init__(self, player_name: Optional[str]) -> None:
+        super().__init__(player_name)
         self.__player_type = PlayerType.HUMAN
+
 
     def play(self, board: Board) -> Tuple[int, int]:
         # now returns a Tuple[int, int] (fixes bug #4)
-        print(f"{self.name} (human) plays their move.")
+        print(f"{self.getPlayerName} (human) plays their move.")
         # TODO: replace with actual input/UI. Dummy move for now:
         return 0, 0
 
@@ -69,23 +68,24 @@ class HumanPlayer(Player):
 
 
 class MachinePlayer(Player):
+
     def __init__(
-        self,
-        name: str,
-        player_sign: PlayerSign,
-        strategy: MachinePlayerStrategy = None) -> None:
-        # pass player_sign correctly to base (fixes bug #1)
-        super().__init__(name, player_sign)
+            self,
+            player_name: Optional[str],
+            strategy: Optional[MachinePlayerStrategy] = None
+    ) -> None:
+        super().__init__(player_name)
         self.__player_type = PlayerType.COMPUTER
         if strategy is None:
-            strategy = RandomPlayerStrategy(self)
-            print("MachinePlayer, RandomPlayerStrategy Strategy created")
+            self._strategy = RandomPlayerStrategy()  # depending on its ctor
+        else:
+            self._strategy = strategy
 
     def play(self, board: Board) -> Tuple[int, int]:
         if board is None:
             # Programming error: caller violated the contract
             raise ValueError("MachinePlayerStrategy: board must not be None")
-        return_tuple : Tuple[int, int] = self.__strategy.play(board)
+        return_tuple : Tuple[int, int] = self._strategy.play(board)
         print(f"{self.name} (CPU) calculates and plays a move.")
         return return_tuple
 
@@ -96,9 +96,9 @@ class MachinePlayer(Player):
 if __name__ == "__main__":
     # call constructors with the required arguments (fixes bug #2)
     players: list[Player] = [
-        HumanPlayer("Alex", PlayerSign.X),
-        MachinePlayer("HAL", PlayerSign.O),
+        HumanPlayer("Alex"),
+        MachinePlayer("HAL"),
     ]
     for p in players:
-        move = p.play(None)
-        print(f"{p.name} played: {move}")
+        #move = p.play(None)
+        print(f"{p.getPlayerName} played: ")
