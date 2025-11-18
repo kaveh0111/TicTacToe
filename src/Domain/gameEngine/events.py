@@ -2,7 +2,7 @@
 from __future__ import annotations
 from typing import Protocol, List, Optional
 
-from typing import Callable, Dict, List, Type
+from typing import Callable, Dict, List, Type, Tuple
 from dataclasses import dataclass
 
 
@@ -11,6 +11,10 @@ from dataclasses import dataclass
 class GameEvent:
     pass
 
+dataclass
+class GameFinished(GameEvent):
+    winner_id: Optional[str]
+    winning_cells: List[Tuple[int, int]]
 
 @dataclass
 class GameStarted(GameEvent):

@@ -9,24 +9,11 @@ It contains a player list.
 It has a turning strategy
 It has a subscribers module
 It has a main loop.
-
-Its main loop is like:
-while (not is_finished)
-    user turn
-    user getNextMove
-    is_finished GameWin;
-    Subscribers.inform();
-
-delete everything to prepare for the next
-
-
 """
 
 # Domain - Board & Cell
-from Domain.gameEngine.Board import Board
-from Domain.gameEngine.Cell import Cell
-from Domain.gameEngine.observer import Observer
-from Domain.gameEngine.events import GameEvent, TurnChanged
+from Domain.gameEngine.GEObserver import Observer
+from Domain.gameEngine.events import GameEvent, TurnChanged, GameFinished
 from Domain.player.Player import Player, PlayerType
 from Domain.gameEngine.GameStatusChecker import GameStatusChecker, TicTacToeGameStatusChecker, GameResult
 # Domain - Strategy interface for machine players
@@ -42,15 +29,16 @@ class GameStatus(Enum):
 
 
 class TurnStrategy:
-    _current_player_idx: int = 1
-    #a simple turn strategy
-    def getNextTurn(self, player_list : List[Player]) -> Player:
+    def __init__(self) -> None:
+        self._current_player_idx: int = -1   # so first call gives index 0
+
+    def getNextTurn(self, player_list: List[Player]) -> Player:
         if player_list is None:
             raise ValueError("TurnStrategy: player_list is None")
         if len(player_list) != 2:
             raise ValueError("TurnStrategy: player_list should have 2 elements")
 
-        self._current_player_idx -= 1
+        self._current_player_idx = (self._current_player_idx + 1) % len(player_list)
         return player_list[self._current_player_idx]
 
 
@@ -84,11 +72,18 @@ class GameEngine(ABC):
             raise ValueError("GameEngine: observer is None")
 
         self._player_list: List[Player] = player_list
-        self._current_turn : Player = self._turn_strategy.getNextTurn(self._player_list)
         self._board: Board = board
         self._observer: Observer = observer
         self._winner : Optional[Player] = None
         self._winner_line = None
+        self._current_turn: Player = self._turn_strategy.getNextTurn(self._player_list)
+
+        self._observer.notify(
+            TurnChanged(current_player=str(self._current_turn.player_id)))
+
+
+    def getCurrentTurn(self) -> Player:
+        return self._current_turn
 
     @abstractmethod
     def setObserver(self, observer: Observer) -> None:
@@ -209,38 +204,41 @@ class GameEngineImp(GameEngine):
         self._game_state = GameStatus.FINISHED
 
     def check_finish(self):
-        #implment checking algorithm
-        #call gamestatuschecker to get the result
-        #if it is not None, inform the result to other through observer
-        game_result : GameResult = self._game_checker.evaluate(self._board)
+        game_result: GameResult = self._game_checker.evaluate(self._board)
 
         if not game_result.finished:
             return
 
+        self._game_state = GameStatus.FINISHED
+
         if game_result.winner is None:
-            #inform game finishing without winner (no empty cell left)
+            # Draw: no winner
+            self._winner = None
+            self.inform(
+                GameFinished(
+                    winner_id=None,
+                    winning_cells=game_result.winning_cells ))
             return
 
-        self._game_state = GameStatus.FINISHED
+        # There is a winner
         self._winner = game_result.winner
-
-        #inform game finishing with winner and game_result.winning_cells
-
+        self.inform(
+            GameFinished(
+                winner_id=str(self._winner.player_id),
+                winning_cells=game_result.winning_cells))
 
     def getMachineMove(self) -> Tuple[int, int]:
         """the machine player will wait for the move from machine user."""
         if not (self._current_turn.getPlayerType() is PlayerType.COMPUTER):
             raise ValueError("Current turn player is not the computer player turn")
-
         return self._current_turn.play(self._board)
 
 
-        raise NotImplementedError
-
     def changeTurn(self) -> None:
-        self._turn_strategy.getNextTurn(self._player_list)
-        self._observer.notify(TurnChanged(current_player=str(self._current_turn.player_id)))
-        #notify subscribers
+        self._current_turn = self._turn_strategy.getNextTurn(self._player_list)
+        self._observer.notify(
+            TurnChanged(current_player=str(self._current_turn.player_id)))
+
 
 
     def inform(self, event: GameEvent) -> None:

@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="adding game status checker">
+    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="finishing user and turn change">
+      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEObserver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Application/GameApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GameApp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/events.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/observer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/AppObserver.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +84,7 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\kaveh\PycharmProjects\TicTacToe\src\Domain\gameEngine" />
+      <recent name="C:\Users\kaveh\PycharmProjects\TicTacToe\src\Application" />
       <recent name="C:\Users\kaveh\PycharmProjects\TicTacToe\src\Domain\player" />
       <recent name="C:\Users\kaveh\PycharmProjects\TicTacToe\src\Domain" />
     </key>
@@ -156,7 +160,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763423142996</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="finishing user and turn change">
+      <option name="closed" value="true" />
+      <created>1763432141006</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1763432141006</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -176,6 +188,7 @@
     <MESSAGE value="updating player and gameengine 1" />
     <MESSAGE value="adding observer and changing gameApp, adding dorpdown menu to the interface" />
     <MESSAGE value="adding game status checker" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding game status checker" />
+    <MESSAGE value="finishing user and turn change" />
+    <option name="LAST_COMMIT_MESSAGE" value="finishing user and turn change" />
   </component>
 </project>

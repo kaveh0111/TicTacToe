@@ -5,7 +5,7 @@ from typing import Callable, Dict, List, Type
 # A handler is simply: function(EventSubclass) -> None
 EventHandler = Callable[[GameEvent], None]
 
-
+#Currently UI, later other modules such as voice, networking, webAPI, etc subscribe to this class
 class Observer:
     def __init__(self) -> None:
         # map: EventClass -> list of handlers
@@ -25,8 +25,6 @@ class Observer:
         handlers = self._handlers.get(type(event), [])
         for call_back in handlers:
             call_back(event)
-
-
 
 
 

@@ -11,7 +11,6 @@ from enum import Enum
 from Domain.player.Player import Player, HumanPlayer, MachinePlayer
 from Domain.gameEngine.GEngine import GameEngine
 from Domain.gameEngine.events import GameEvent, TurnChanged
-from Domain.gameEngine.observer import Observer
 from typing import List, Optional
 from Domain.player.machineplayerstrategy.MachinePlayerStrategy import MachinePlayerStrategy
 class GameType(Enum):
@@ -65,6 +64,10 @@ class GameApp(ABC):
         #callback for changing turns
         raise NotImplementedError
 
+    @abstractmethod
+    def onTurnChange(self, event: GameEvent) -> None:
+        raise NotImplementedError
+
 
 
 
@@ -104,8 +107,17 @@ class GameAppSinglePlayer(GameApp):
         new_player : Player = self.getPlayer(event.current_player)
         if new_player is None:
             raise ValueError("GameAppSinglePlayer: TurnChanged, with to an empty/or a new player not registered")
-        #check if the player is a machine player, take its move and apply it
-        #if the the player is a human player do nothing more (wait until the human push a button)
+        self._turn = new_player
+
+        # If it's the machine's turn, immediately ask for its move and execute it
+        if new_player is self._machine_player:
+            row, col = self._game_engine.getMachineMove()
+            # This will again call acceptMove, check_finish, changeTurn, etc.
+            self.executeMove(self._machine_player, row, col)
+        else:
+            # Human's turn: do nothing. GUI will call executeMove when the user clicks.
+            pass
+
 
 
     def getPlayer(self, player_id: str) -> Optional[Player]:
@@ -114,21 +126,21 @@ class GameAppSinglePlayer(GameApp):
                 return p
         return None
 
-
-
-    def executeMove(self, player: Player, row : int, column : int) -> None:
+    def executeMove(self, player: Player, row: int, column: int) -> None:
         self.isGamePlayer(player)
-        #if player is self._machine_player:
-        #    raise AttributeError("GameAppSinglePlayer Error: The machine player cannot work as a human player")
-        if not player is self._turn:
+
+        if player is not self._turn:
+            # Not this player's turn; ignore
             return
+
         print("sending the move to the game engine")
-        self._game_engine.acceptMove(row, column, player)
+        if not self._game_engine.acceptMove(row, column, player):
+            # invalid move (cell full etc.), you might notify UI and return
+            return
+
         self._game_engine.check_finish()
-        self._game_engine.changeTurn()
-
-
-
+        if not self._game_engine.isGameFinished():
+            self._game_engine.changeTurn()
 
     def onMove(self, player: Player, row: int, column: int) -> None:
         #here the game engine either accepted the move done by the user or
