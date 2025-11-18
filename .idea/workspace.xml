@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="adding observer and changing gameApp, adding dorpdown menu to the interface">
-      <change afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GameStatusChecker.py" afterDir="false" />
+    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="adding game status checker">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Application/GameApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GameApp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
@@ -149,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763357971526</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="adding game status checker">
+      <option name="closed" value="true" />
+      <created>1763423142995</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1763423142996</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -168,6 +175,7 @@
     <MESSAGE value="second commit" />
     <MESSAGE value="updating player and gameengine 1" />
     <MESSAGE value="adding observer and changing gameApp, adding dorpdown menu to the interface" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding observer and changing gameApp, adding dorpdown menu to the interface" />
+    <MESSAGE value="adding game status checker" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding game status checker" />
   </component>
 </project>

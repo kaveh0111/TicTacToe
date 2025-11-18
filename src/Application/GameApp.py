@@ -10,9 +10,9 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from Domain.player.Player import Player, HumanPlayer, MachinePlayer
 from Domain.gameEngine.GEngine import GameEngine
-from Domain.gameEngine.events import GameEvent
+from Domain.gameEngine.events import GameEvent, TurnChanged
 from Domain.gameEngine.observer import Observer
-from typing import List
+from typing import List, Optional
 from Domain.player.machineplayerstrategy.MachinePlayerStrategy import MachinePlayerStrategy
 class GameType(Enum):
     SINGLE_PLAYER = 1
@@ -43,7 +43,13 @@ class GameApp(ABC):
         #it checks if the given player is playing in the game
         raise NotImplementedError
 
-    def performedMove(self, player: Player, row: int, column: int) -> None:
+    @abstractmethod
+    def getPlayer(self, player_id: str) -> Optional[Player]:
+        # it checks if the given Id is related to id of a game player, return its object, otherwise return None
+        raise NotImplementedError
+
+    @abstractmethod
+    def onMove(self, player: Player, row: int, column: int) -> None:
         #here the game engine either accepted the move done by the user or
         #it give the result of the game done by one of the players (machine or other palyers in multiplayer games)
         #this function will call the client code GUI to update it (or later throw web API)
@@ -55,7 +61,7 @@ class GameApp(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def onChangeTurn(self, event: GameEvent) -> None:
+    def onTurnChange(self, event: GameEvent) -> None:
         #callback for changing turns
         raise NotImplementedError
 
@@ -89,9 +95,25 @@ class GameAppSinglePlayer(GameApp):
             raise Exception('Invalid game type, GameApp requires one machine player and one human player')
 
 
-    def onChangeTurn(self, event: GameEvent) -> None:
+    def onTurnChange(self, event: GameEvent) -> None:
         #callback for changing turns
-        raise NotImplementedError
+        #inform subscribers
+        #change the internal state for turning
+        if not isinstance(event, TurnChanged):
+            raise ValueError("GameAppSinglePlayer: TurnChanged, with wrong event type")
+        new_player : Player = self.getPlayer(event.current_player)
+        if new_player is None:
+            raise ValueError("GameAppSinglePlayer: TurnChanged, with to an empty/or a new player not registered")
+        #check if the player is a machine player, take its move and apply it
+        #if the the player is a human player do nothing more (wait until the human push a button)
+
+
+    def getPlayer(self, player_id: str) -> Optional[Player]:
+        for p in self._player_list:
+            if p.player_id == player_id:
+                return p
+        return None
+
 
 
     def executeMove(self, player: Player, row : int, column : int) -> None:
@@ -108,7 +130,7 @@ class GameAppSinglePlayer(GameApp):
 
 
 
-    def performedMove(self, player: Player, row: int, column: int) -> None:
+    def onMove(self, player: Player, row: int, column: int) -> None:
         #here the game engine either accepted the move done by the user or
         #it give the result of the game done by one of the players (machine or other palyers in multiplayer games)
         #this function will call the client code GUI to update it (or later throw web API)
@@ -122,8 +144,9 @@ class GameAppSinglePlayer(GameApp):
         return True
 
 
-
+    """
     def changeTurn(self, player: Player) -> None:
         #can be called with the callback from gameengine to change turn
         self.isGamePlayer(player)
         self._turn = player
+    """

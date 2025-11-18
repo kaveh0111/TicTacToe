@@ -28,7 +28,7 @@ from Domain.gameEngine.Cell import Cell
 from Domain.gameEngine.observer import Observer
 from Domain.gameEngine.events import GameEvent, TurnChanged
 from Domain.player.Player import Player, PlayerType
-from Domain.gameEngine.GameStatusChecker import GameStatusChecker, TicTacToeGameStatusChecker
+from Domain.gameEngine.GameStatusChecker import GameStatusChecker, TicTacToeGameStatusChecker, GameResult
 # Domain - Strategy interface for machine players
 from Domain.player.machineplayerstrategy.MachinePlayerStrategy import *
 from typing import Optional, Tuple
@@ -43,7 +43,7 @@ class GameStatus(Enum):
 
 class TurnStrategy:
     _current_player_idx: int = 1
-
+    #a simple turn strategy
     def getNextTurn(self, player_list : List[Player]) -> Player:
         if player_list is None:
             raise ValueError("TurnStrategy: player_list is None")
@@ -208,11 +208,24 @@ class GameEngineImp(GameEngine):
     def finish(self) -> None:
         self._game_state = GameStatus.FINISHED
 
-    def check_finish():
+    def check_finish(self):
         #implment checking algorithm
         #call gamestatuschecker to get the result
-        #if it is not None, inform the result to other throgh observer
-        self._game_checker.check_finish()
+        #if it is not None, inform the result to other through observer
+        game_result : GameResult = self._game_checker.evaluate(self._board)
+
+        if not game_result.finished:
+            return
+
+        if game_result.winner is None:
+            #inform game finishing without winner (no empty cell left)
+            return
+
+        self._game_state = GameStatus.FINISHED
+        self._winner = game_result.winner
+
+        #inform game finishing with winner and game_result.winning_cells
+
 
     def getMachineMove(self) -> Tuple[int, int]:
         """the machine player will wait for the move from machine user."""
