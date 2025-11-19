@@ -98,4 +98,4 @@ class GameAppBuilder:
         self.setup_ui_players(window)
         return game_app
 
-builder = GameAppBuilder().getNewGameApp()
+#builder = GameAppBuilder().getNewGameApp()

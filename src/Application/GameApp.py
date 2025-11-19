@@ -110,6 +110,7 @@ class GameApp(ABC):
         Default: if subclass defines onTurnChange(event), call it.
         """
         # We don't make onTurnChange abstract in base to avoid breaking subclasses.
+        print("gameapp on turnchanged event called")
         handler = getattr(self, "onTurnChange", None)
         if callable(handler):
             handler(event)

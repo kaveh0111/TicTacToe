@@ -15,7 +15,7 @@ if __name__ == '__main__':
     #finaly set(IGameApp) the application factory to the gui.
 
     app_builder : GameAppBuilder = GameAppBuilder()
-    game_app : GameApp = app_builder.getNewGameApp()
+    #game_app : GameApp = app_builder.getNewGameApp()
 
     window = tictactoe(app_builder)
     #window.setGameApp(game_app)
