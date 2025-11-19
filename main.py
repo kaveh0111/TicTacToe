@@ -13,11 +13,14 @@ if __name__ == '__main__':
     # IGFactory make a game based on the parameters coming form user in UI
     #The application factory will return an object of IGameApp class
     #finaly set(IGameApp) the application factory to the gui.
-    window = tictactoe()
-    application : GameApp = GameAppBuilder().getNewGameApp()
-    window.setGameApp(application)
+
+    app_builder : GameAppBuilder = GameAppBuilder()
+    game_app : GameApp = app_builder.getNewGameApp()
+
+    window = tictactoe(app_builder)
+    #window.setGameApp(game_app)
+
 
     window.geometry("650x650")
     window.mainloop()
-
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

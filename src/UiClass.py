@@ -3,6 +3,8 @@ from tkinter import font, Label, StringVar, ttk, Button
 from tkinter.constants import DISABLED
 from typing import List, Tuple
 import warnings
+
+from Application.GAppFactory import GameAppBuilder
 from Application.GameApp import GameApp
 from Application.AppObserver import Observer
 from Domain.gameEngine.events import *
@@ -19,18 +21,14 @@ from Domain.gameEngine.events import *
 
 
 class tictactoe(tk.Tk):
-    def __init__(self, grid_column_size=3, grid_row_size=3):
+    def __init__(self, game_builder: GameAppBuilder,grid_column_size=3, grid_row_size=3):
         super().__init__()
         self.__grid_width: int = grid_column_size
         self.__grid_height: int = grid_row_size
-
-        self._app : GameApp = None
         self._observer: Observer = None
-        if self._app is None:
-            warnings.warn(
-                "UI: It requires to inject the gameApp later in a Factory.",
-                UserWarning)
 
+        self._app_builder: GameAppBuilder = game_builder
+        self._app: Optional[GameApp] = None
 
 
         self.title("TicTacToe")
@@ -40,6 +38,7 @@ class tictactoe(tk.Tk):
         self.__turn: bool = True                            #Take the turning strategy
         self._cells = {}
         self.__buttons: List[List[tk.Button]] = []
+
 
         self.__human_name_var: StringVar = StringVar(self, value="My name: ")
         self.__machine_name_var: StringVar = StringVar(self, value="Machine name: ")
@@ -75,7 +74,7 @@ class tictactoe(tk.Tk):
             self.__game_rows_drop_down["menu"].entryconfig(idx, state=tk.DISABLED)
 
         #button = tk.Button(self, text="Start")
-        button = tk.Button(button_frame, text="Start")
+        button = tk.Button(button_frame, text="Start", command=self._on_start_clicked)
         button.pack(side="left", padx=4, pady=4)
         #button = tk.Button(button_frame, text="Pause")
         #button.pack(side="left", padx=4)
@@ -168,8 +167,9 @@ class tictactoe(tk.Tk):
 
     def disableButtons(self):
         print("I am called when a move is accepted")
-        for btn in self.__buttons:
-            btn.configure(state="disabled")
+        for row in self.__buttons:
+            for btn in row:
+                btn.configure(state="disabled")
 
     def on_mouse_enter(self, event):
         #event.widget.configure(bg="lightgreen")
@@ -184,14 +184,16 @@ class tictactoe(tk.Tk):
         print("I am going to call engine to check if it is a valid move or not")
         #it should call app layer function
 
-
+    def _on_start_clicked(self) -> None:
+        # Delegate creation + wiring to the builder
+        self._app_builder.build_and_bind_game(self)
 
     def cellMarked(self, row: int, col: int):
         self.__buttons[row][col].configure(state=DISABLED)
         print("The cell is marked")
         #event.widget.configure(state = tk.DISABLED)
 
-    def cellUnMarked(row: int, col: int):
+    def cellUnMarked(self, row: int, col: int):
         print("The cell is unmarked since the user selected it")
         #it is used for review game
 
@@ -208,6 +210,7 @@ class tictactoe(tk.Tk):
 
     def makeGrid(self):
         for row in range(self.__grid_width):
+            row_buttons = []
             for col in range(self.__grid_height):
                 grid_button = tk.Button(
                     self.board,
@@ -221,5 +224,6 @@ class tictactoe(tk.Tk):
                 #grid_button.bind("<Button-1>", self.on_click(row,col))
                 grid_button.bind("<Enter>", self.on_mouse_enter)
                 grid_button.bind("<Leave>", self.on_mouse_leave)
-
+                row_buttons.append(grid_button)
+            self.__buttons.append(row_buttons)
                 #b = ttk.Button(grid, text=" ", width=4, command=lambda i=i: self.on_cell(i))
