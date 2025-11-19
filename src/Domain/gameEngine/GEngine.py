@@ -194,7 +194,7 @@ class GameEngineImp(GameEngine):
                 player=str(player.player_id),
                 row=row,
                 col=col,
-                board_snapshot=snapshot
+                board_snapshot=self._board.get_snapshot()
             )
         )
         return True

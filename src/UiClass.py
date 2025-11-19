@@ -182,6 +182,26 @@ class tictactoe(tk.Tk):
     def on_click(self, row: int, col: int):
         print("The button is clicked with row", row)
         print("I am going to call engine to check if it is a valid move or not")
+
+        if self._app is None:
+            warnings.warn("UI: GameApp is not set. Press Start to build the game first.")
+            return
+
+            # Make sure we know who the human player is
+        if self._my_id is None:
+            warnings.warn("UI: Human player id is not set on UI (setMyPlayer was not called).")
+            return
+        print("self._my_id :", self._my_id, "self._my_name :", self._my_name)
+            # Ask the application for the Player object corresponding to my id
+        player = self._app.getPlayer(self._my_id)
+        if player is None:
+            warnings.warn(f"UI: No Player found in GameApp for id {self._my_id}.")
+            return
+
+        # Delegate the move to the application layer
+        self._app.executeMove(player, row, col)
+
+
         #it should call app layer function
 
     def _on_start_clicked(self) -> None:
