@@ -10,10 +10,11 @@ class Observer:
     def __init__(self) -> None:
         # map: EventClass -> list of handlers
         self._handlers: Dict[Type[GameEvent], List[EventHandler]] = {}
+        #print("an instance of App Observer is created")
 
     def subscribe(self, event_type: Type[GameEvent], handler: EventHandler) -> None:
         """Subscribe handler to a specific Event subclass."""
-        print("appObserver subscribe=====================")
+        #print("appObserver subscribe=====================")
         self._handlers.setdefault(event_type, []).append(handler)
 
     def unSubscribe(self, event_type: Type[GameEvent], handler: EventHandler) -> None:
@@ -23,8 +24,9 @@ class Observer:
 
     def notify(self, event: GameEvent) -> None:
         """Call only handlers registered for this event's class."""
-        print("appObserver notify", event)
+
         handlers = self._handlers.get(type(event), [])
+        print("appObserver notify", event, "and the handler is", handlers)
         for call_back in handlers:
             call_back(event)
 

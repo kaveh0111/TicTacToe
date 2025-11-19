@@ -35,7 +35,7 @@ class tictactoe(tk.Tk):
         text = self.__default_text = "."
         width = self.__button_width = 12
         height = self.__button_height = 6
-        self.__turn: bool = True                            #Take the turning strategy
+        self.__turn: Optional[str] = None                            #Take the turning strategy
         self._cells = {}
         self.__buttons: List[List[tk.Button]] = []
 
@@ -135,6 +135,7 @@ class tictactoe(tk.Tk):
 
     def on_turn_changed(self, event: TurnChanged) -> None:
         # Adapt the event to your existing `turnChanged` method
+        print("ui on_turn_changed" , event)
         self.turnChanged(event.current_player)
 
     def on_ilegal_move(self, event: IlegalMove) -> None:
@@ -217,13 +218,16 @@ class tictactoe(tk.Tk):
         print("The cell is unmarked since the user selected it")
         #it is used for review game
 
-    def turnChanged(self, new_player : str = "Machine"):
+    def turnChanged(self, new_player : str):
         #consider to change it to not blindly change the turn
-        self.__turn = not self.__turn
-        if self.__turn:
+        print("ui turnchanged the new player", new_player)
+        self.__turn = new_player
+        if self.__turn == self._my_name:
             print("It is your turn ")
+            self.__current_turn_var.set(f"Current turn: {self._my_name}")
         else:
             print("It is the turn of", new_player)
+            self.__current_turn_var.set(f"Current turn: {self.__turn}")
 
     def gameWon(self, winner : str):
         print("the winner is ", winner)
