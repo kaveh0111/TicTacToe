@@ -236,7 +236,7 @@ class GameEngineImp(GameEngine):
         self._winner = game_result.winner
         self.inform(
             GameFinished(
-                winner_id=str(self._winner.player_id),
+                winner_id=self._winner,
                 winning_cells=game_result.winning_cells))
 
     def getMachineMove(self) -> Tuple[int, int]:

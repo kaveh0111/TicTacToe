@@ -13,6 +13,7 @@ class Observer:
 
     def subscribe(self, event_type: Type[GameEvent], handler: EventHandler) -> None:
         """Subscribe handler to a specific Event subclass."""
+        print("appObserver subscribe=====================")
         self._handlers.setdefault(event_type, []).append(handler)
 
     def unSubscribe(self, event_type: Type[GameEvent], handler: EventHandler) -> None:
@@ -22,6 +23,7 @@ class Observer:
 
     def notify(self, event: GameEvent) -> None:
         """Call only handlers registered for this event's class."""
+        print("appObserver notify", event)
         handlers = self._handlers.get(type(event), [])
         for call_back in handlers:
             call_back(event)

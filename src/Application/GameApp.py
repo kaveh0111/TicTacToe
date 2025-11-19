@@ -8,7 +8,7 @@ One of its duties are to check if a move is acceptable(based on
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from Domain.player.Player import Player, HumanPlayer, MachinePlayer
+from Domain.player.Player import Player, HumanPlayer, MachinePlayer, PlayerType
 from Domain.gameEngine.GEngine import GameEngine
 from Domain.gameEngine.events import GameEvent, TurnChanged
 from Domain.gameEngine.events import *
@@ -35,6 +35,13 @@ class GameApp(ABC):
         self._player_list: List[Player] = player_list
         self._turn: Player = self._game_engine.getCurrentTurn()
 
+        #connecting application observer to the domain (gengine) observer
+        self._observer: Optional[AppObserver] = app_observer
+        if app_observer is None:
+            self._observer: Optional[AppObserver] = AppObserver()
+        engine_observer = self._game_engine.getObserver()
+        engine_observer.setSubscriber(self._observer.notify)
+
         # store the dependency; if not provided, create a default one
         self._observer: AppObserver = app_observer if app_observer is not None else AppObserver()
         self._observer.subscribe(GameStarted, self.onGameStarted)
@@ -44,6 +51,7 @@ class GameApp(ABC):
         self._observer.subscribe(TimerDeadline, self.onTimerDeadline)
         self._observer.subscribe(GameFinished, self.onGameFinished)
         self._observer.subscribe(GameOver, self.onGameOver)
+
 
 
     def getObserver(self) -> AppObserver:
@@ -91,6 +99,7 @@ class GameApp(ABC):
         Hook for MoveMade events.
         Default: adapt to existing onMove(player, row, col).
         """
+        print("game app: ................ on move made")
         player_obj = self.getPlayer(event.player)
         if player_obj is not None:
             self.onMove(player_obj, event.row, event.col)
@@ -162,11 +171,16 @@ class GameAppSinglePlayer(GameApp):
                 (self._human_player is None)):
             raise Exception('Invalid game type, GameApp requires one machine player and one human player')
 
+        print("gameappsingleplayer : the current turn is", self._turn.getPlayerName)
+        if self._turn.getPlayerType() == PlayerType.COMPUTER:
+            self._doMachinePlayerMove()
+
 
     def onTurnChange(self, event: GameEvent) -> None:
         #callback for changing turns
         #inform subscribers
         #change the internal state for turning
+        print("gameappimplmentation: on turn change event called")
         if not isinstance(event, TurnChanged):
             raise ValueError("GameAppSinglePlayer: TurnChanged, with wrong event type")
         new_player : Player = self.getPlayer(event.current_player)
@@ -176,14 +190,13 @@ class GameAppSinglePlayer(GameApp):
 
         # If it's the machine's turn, immediately ask for its move and execute it
         if new_player is self._machine_player:
-            row, col = self._game_engine.getMachineMove()
-            # This will again call acceptMove, check_finish, changeTurn, etc.
-            self.executeMove(self._machine_player, row, col)
-        else:
-            # Human's turn: do nothing. GUI will call executeMove when the user clicks.
-            pass
+            self._doMachinePlayerMove()
 
 
+    def _doMachinePlayerMove(self):
+        row, col = self._game_engine.getMachineMove()
+        # This will again call acceptMove, check_finish, changeTurn, etc.
+        self.executeMove(self._machine_player, row, col)
 
     def getPlayer(self, player_id: str) -> Optional[Player]:
         for p in self._player_list:
@@ -203,7 +216,7 @@ class GameAppSinglePlayer(GameApp):
         if not self._game_engine.acceptMove(row, column, player):
             # invalid move (cell full etc.), you might notify UI and return
             return
-
+        print("after sending the move to the game engine and it is accepted", )
         self._game_engine.check_finish()
         if not self._game_engine.isGameFinished():
             self._game_engine.changeTurn()

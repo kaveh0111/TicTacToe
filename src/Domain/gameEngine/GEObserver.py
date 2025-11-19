@@ -12,7 +12,8 @@ class Observer:
         self._subscriber: Optional[EventHandler] = None
 
     def setSubscriber(self, handler: EventHandler) -> None:
-
+        print("Gameengine Observer: setSubscriber")
+        self._subscriber = handler
         if handler is None:
             raise ValueError("GameEngine.Observer.setSubscriber: handler is None")
 
@@ -25,6 +26,8 @@ class Observer:
         GameEngine will call this whenever something happens
         (TurnChanged, GameFinished, etc.).
         """
+        print("gameengine Observer: notify................................", event)
         if self._subscriber is None:
             return
+
         self._subscriber(event)
