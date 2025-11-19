@@ -66,7 +66,7 @@ class GameAppBuilder:
         if self._human_player is None:
             raise RuntimeError("GameAppBuilder: getNewGameApp() has not been called yet.")
         # Accessing protected attributes to avoid changing the Player class.
-        return (self._human_player, self._human_player.player_id)
+        return self._human_player.getPlayerName, self._human_player.player_id
 
     def get_machine_player_name_id(self) -> tuple[str, int]:
         """
@@ -74,8 +74,7 @@ class GameAppBuilder:
         """
         if self._machine_player is None:
             raise RuntimeError("GameAppBuilder: getNewGameApp() has not been called yet.")
-        return (self._machine_player, self._machine_player.player_id)  # type: ignore[attr-defined]
-
+        return self._machine_player.getPlayerName, self._machine_player.player_id
     def setup_ui_players(self, window) -> None:
 
         #Configure the UI with the human and machine player's name/id.

@@ -25,5 +25,5 @@ class GameEngineFactory:
         game_engine_observer: Observer = Observer()
         game_engine : GameEngine = GameEngineImp( board,
                                                     self._player_list,
-                                                    game_engine_observer)
+                                                    observer = game_engine_observer)
         return game_engine

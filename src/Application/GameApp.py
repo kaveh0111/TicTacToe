@@ -33,7 +33,7 @@ class GameApp(ABC):
     ) -> None:
         self._game_engine: GameEngine = game_engine
         self._player_list: List[Player] = player_list
-        self._turn: Player = None
+        self._turn: Player = self._game_engine.getCurrentTurn()
 
         # store the dependency; if not provided, create a default one
         self._observer: AppObserver = app_observer if app_observer is not None else AppObserver()
@@ -192,6 +192,7 @@ class GameAppSinglePlayer(GameApp):
         return None
 
     def executeMove(self, player: Player, row: int, column: int) -> None:
+        print("I recived a move")
         self.isGamePlayer(player)
 
         if player is not self._turn:

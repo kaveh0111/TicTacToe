@@ -13,7 +13,8 @@ It has a main loop.
 
 # Domain - Board & Cell
 from Domain.gameEngine.GEObserver import Observer
-from Domain.gameEngine.events import GameEvent, TurnChanged, GameFinished
+from Domain.gameEngine.events import (GameEvent, MoveMade,
+                                      TurnChanged, GameFinished)
 from Domain.player.Player import Player, PlayerType
 from Domain.gameEngine.GameStatusChecker import GameStatusChecker, TicTacToeGameStatusChecker, GameResult
 # Domain - Strategy interface for machine players
@@ -184,6 +185,7 @@ class GameEngineImp(GameEngine):
 
 
     def acceptMove(self, row:int, col:int, player : Player) -> bool:
+        print("GameEngineImp, acceptmove")
         if not self._board.isEmptyCell(row, col):
             print("GameEngineImp, the cell is full")
             return False
