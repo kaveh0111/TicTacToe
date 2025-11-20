@@ -1,7 +1,11 @@
 from Domain.gameEngine.events import GameEvent
 from typing import Callable, Optional, Type
+import logging
 
 EventHandler = Callable[[GameEvent], None]
+
+logger = logging.getLogger(__name__)
+
 
 class Observer:
     """
@@ -12,13 +16,9 @@ class Observer:
         self._subscriber: Optional[EventHandler] = None
 
     def setSubscriber(self, handler: EventHandler) -> None:
-        print("Gameengine Observer: setSubscriber")
+        logger.debug("GameEngine.Observer.setSubscriber() called with handler=%s", handler)
+        assert handler is not None, "GameEngine.Observer.setSubscriber: handler is None"
         self._subscriber = handler
-        if handler is None:
-            raise ValueError("GameEngine.Observer.setSubscriber: handler is None")
-
-        self._subscriber = handler
-
 
     def notify(self, event: GameEvent) -> None:
         """
@@ -26,7 +26,7 @@ class Observer:
         GameEngine will call this whenever something happens
         (TurnChanged, GameFinished, etc.).
         """
-        print("gameengine Observer: notify................................", event)
+        logger.debug("GameEngine.Observer.notify() called with event=%s", event)
         if self._subscriber is None:
             return
 

@@ -16,11 +16,14 @@ from typing import List, Optional
 from Application.AppObserver import Observer as AppObserver
 from typing import List, Optional
 from Domain.player.machineplayerstrategy.MachinePlayerStrategy import MachinePlayerStrategy
+import logging
 class GameType(Enum):
     SINGLE_PLAYER = 1
     TWO_PLAYER = 2
 
 from typing import List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 class GameApp(ABC):
@@ -98,7 +101,7 @@ class GameApp(ABC):
         Hook for MoveMade events.
         Default: adapt to existing onMove(player, row, col).
         """
-        print("game app: ................ on move made")
+        logger.debug("GameApp.onMoveMade() called with event=%s", event)
         player_obj = self.getPlayer(event.player_id)
         if player_obj is not None:
             self.onMove(player_obj, event.row, event.col)
@@ -109,7 +112,7 @@ class GameApp(ABC):
         Default: if subclass defines onTurnChange(event), call it.
         """
         # We don't make onTurnChange abstract in base to avoid breaking subclasses.
-        print("gameapp on turnchanged event called")
+        logger.debug("GameApp.onTurnChangedEvent() called with event=%s", event)
         handler = getattr(self, "onTurnChange", None)
         if callable(handler):
             handler(event)
@@ -148,8 +151,6 @@ class GameApp(ABC):
 
 
 
-
-
 class GameAppSinglePlayer(GameApp):
     """Implmentation  class for application"""
     def __init__(self, game_engine : GameEngine, player_list : List[Player]) -> None:
@@ -158,8 +159,7 @@ class GameAppSinglePlayer(GameApp):
         self._human_player: Player = None
 
         # checking exactly one machine and one human player is created
-        if not self._player_list:
-            raise AttributeError("GameApp: Player list is empty")
+        assert self._player_list, "GameApp: Player list is empty"
 
         for p in self._player_list:
             if isinstance(p, HumanPlayer):
@@ -167,11 +167,14 @@ class GameAppSinglePlayer(GameApp):
             if isinstance(p, MachinePlayer):
                 self._machine_player = p
 
-        if ((self._machine_player is None) or
-                (self._human_player is None)):
-            raise Exception('Invalid game type, GameApp requires one machine player and one human player')
+        assert (
+            self._machine_player is not None and self._human_player is not None
+        ), "Invalid game type, GameApp requires one machine player and one human player"
 
-        print("gameappsingleplayer : the current turn is", self._turn.getPlayerName)
+        logger.debug(
+            "GameAppSinglePlayer: the current turn is %s",
+            self._turn.getPlayerName,
+        )
         if self._turn.getPlayerType() == PlayerType.COMPUTER:
             self._doMachinePlayerMove()
 
@@ -180,12 +183,10 @@ class GameAppSinglePlayer(GameApp):
         #callback for changing turns
         #inform subscribers
         #change the internal state for turning
-        print("gameappimplmentation: on turn change event called")
-        if not isinstance(event, TurnChanged):
-            raise ValueError("GameAppSinglePlayer: TurnChanged, with wrong event type")
+        logger.debug("GameAppSinglePlayer.onTurnChange() called with event=%s", event)
+        assert isinstance(event, TurnChanged), "GameAppSinglePlayer: TurnChanged, with wrong event type"
         new_player : Player = self.getPlayer(event.current_player)
-        if new_player is None:
-            raise ValueError("GameAppSinglePlayer: TurnChanged, with to an empty/or a new player not registered")
+        assert new_player is not None, "GameAppSinglePlayer: TurnChanged, with to an empty/or a new player not registered"
         self._turn = new_player
 
         # If it's the machine's turn, immediately ask for its move and execute it
@@ -205,18 +206,18 @@ class GameAppSinglePlayer(GameApp):
         return None
 
     def executeMove(self, player: Player, row: int, column: int) -> None:
-        print("I recived a move")
+        logger.debug("GameAppSinglePlayer.executeMove() received move: player=%s, row=%s, column=%s", player, row, column)
         self.isGamePlayer(player)
 
         if player is not self._turn:
             # Not this player's turn; ignore
             return
 
-        print("sending the move to the game engine")
+        logger.debug("GameAppSinglePlayer.executeMove() sending move to game engine")
         if not self._game_engine.acceptMove(row, column, player):
             # invalid move (cell full etc.), you might notify UI and return
             return
-        print("after sending the move to the game engine and it is accepted", )
+        logger.debug("GameAppSinglePlayer.executeMove() move accepted by game engine")
         """
         self._game_engine.check_finish()
         if not self._game_engine.isGameFinished():
@@ -227,20 +228,21 @@ class GameAppSinglePlayer(GameApp):
         #here the game engine either accepted the move done by the user or
         #it give the result of the game done by one of the players (machine or other palyers in multiplayer games)
         #this function will call the client code GUI to update it (or later throw web API)
-        print("I recived a move notification from gameengine")
+        logger.debug(
+            "GameAppSinglePlayer.onMove() notification from gameengine: player=%s, row=%s, column=%s",
+            player,
+            row,
+            column,
+        )
 
     def isGamePlayer(self, player: Player) -> bool:
-        if player is None:
-            raise AttributeError("GameAppSinglePlayer: The player  is empty")
-        if not any(player is x for x in self._player_list):
-            raise AttributeError("GameAppSinglePlayer: Player is not in current player list")
+        assert player is not None, "GameAppSinglePlayer: The player  is empty"
+        assert any(player is x for x in self._player_list), "GameAppSinglePlayer: Player is not in current player list"
         return True
 
     def changeMachinePlayerStrategy(self, player: Player, new_strategy : MachinePlayerStrategy) -> None:
         #change the strategy of the machine player to change the dificulity levels of a single game etc.
-        print("change the machine player strategy is not implmented yet")
-
-
+        logger.debug("GameAppSinglePlayer.changeMachinePlayerStrategy() not implemented yet: player=%s, new_strategy=%s", player, new_strategy)
 
 
 

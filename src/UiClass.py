@@ -5,12 +5,14 @@ from tkinter import font, Label, StringVar, ttk, Button, messagebox
 from tkinter.constants import DISABLED
 from typing import List, Tuple, Optional
 import warnings
+import logging
 
 from Application.GAppFactory import GameAppBuilder
 from Application.GameApp import GameApp
 from Application.AppObserver import Observer
 from Domain.gameEngine.events import *
 
+logger = logging.getLogger(__name__)
 
 
 #This class is responsibe for UI
@@ -149,17 +151,17 @@ class tictactoe(tk.Tk):
 
     def on_game_started(self, event: GameStarted) -> None:
         # For now, just log. Later, may resize grid, reset UI, etc.
-        print("UI: Game started, players:", event.player)
+        logger.debug("UI: Game started, players: %s", event.player)
 
     def on_move_made(self, event: MoveMade) -> None:
-        print(f"UI: Move made by {event.player_id} at row={event.row}, col={event.col}")
+        logger.debug("UI: Move made by %s at row=%s, col=%s", event.player_id, event.row, event.col)
         self.update_cell(event.player_id, event.row, event.col)
 
     def gameWon(self, winner_id: int) -> None:
         """Handle a win from the UI side (single place to change later)."""
         winner_name = self._player_name_from_id(winner_id)
         msg = f"Game finished – winner: {winner_name}"
-        print("UI:", msg)
+        logger.info("UI: %s", msg)
         self.show_game_result_prompt("Game Finished", msg)
         # Stop further moves
         self.disableButtons()
@@ -176,17 +178,17 @@ class tictactoe(tk.Tk):
 
 
     def on_ilegal_move(self, event: IlegalMove) -> None:
-        print(f"UI: Illegal move by {event.player} at row={event.row}, col={event.col}")
+        logger.debug("UI: Illegal move by %s at row=%s, col=%s", event.player, event.row, event.col)
         # later you can show a popup or status label here
 
     def on_timer_deadline(self, event: TimerDeadline) -> None:
-        print(f"UI: Timer deadline for player {event.player}")
+        logger.debug("UI: Timer deadline for player %s", event.player)
         # later you might auto-move or forfeit etc.
 
     def on_game_finished(self, event: GameFinished) -> None:
         if event.winner_id is None:
             msg = "Game finished – draw."
-            print("UI:", msg)
+            logger.info("UI: %s", msg)
             self.show_game_result_prompt("Game Finished", msg)
             self.disableButtons()
         else:
@@ -200,7 +202,7 @@ class tictactoe(tk.Tk):
             winner_name = self._player_name_from_id(event.winner)
             msg = f"Game over – winner: {winner_name}"
 
-        print("UI:", msg)
+        logger.info("UI: %s", msg)
         self.show_game_result_prompt("Game Over", msg)
         #  to disable UI:
         self.disableButtons()
@@ -211,7 +213,7 @@ class tictactoe(tk.Tk):
         pass
 
     def disableButtons(self):
-        print("I am called when a move is accepted")
+        logger.debug("UI: disableButtons() called (move accepted or game finished)")
         for row in self.__buttons:
             for btn in row:
                 btn.configure(state="disabled")
@@ -225,8 +227,8 @@ class tictactoe(tk.Tk):
         #event.widget.configure(bg="red")
 
     def on_click(self, row: int, col: int):
-        print("The button is clicked with row", row)
-        print("I am going to call engine to check if it is a valid move or not")
+        logger.debug("UI: Button clicked at row=%s, col=%s", row, col)
+        logger.debug("UI: Going to call engine to check if it is a valid move or not")
 
         if self._app is None:
             warnings.warn("UI: GameApp is not set. Press Start to build the game first.")
@@ -235,8 +237,8 @@ class tictactoe(tk.Tk):
         if self._my_id is None:
             warnings.warn("UI: Human player id is not set on UI (setMyPlayer was not called).")
             return
-        print("self._my_id :", self._my_id, "self._my_name :", self._my_name)
-            # Ask the application for the Player object corresponding to my id
+        logger.debug("UI: self._my_id=%s, self._my_name=%s", self._my_id, self._my_name)
+        # Ask the application for the Player object corresponding to my id
         player = self._app.getPlayer(self._my_id)
         if player is None:
             warnings.warn(f"UI: No Player found in GameApp for id {self._my_id}.")
@@ -274,11 +276,11 @@ class tictactoe(tk.Tk):
 
     def cellMarked(self, row: int, col: int):
         self.__buttons[row][col].configure(state=DISABLED)
-        print("The cell is marked")
+        logger.debug("UI: cellMarked(%s, %s)", row, col)
         #event.widget.configure(state = tk.DISABLED)
 
     def cellUnMarked(self, row: int, col: int):
-        print("The cell is unmarked since the user selected it")
+        logger.debug("UI: cellUnMarked(%s, %s) since the user selected it", row, col)
         #it is used for review game
 
     def on_turn_changed(self, event: TurnChanged) -> None:
@@ -292,7 +294,7 @@ class tictactoe(tk.Tk):
         else:
             name = f"Player {pid}"
 
-        print("ui on_turn_changed", pid, "->", name)
+        logger.debug("UI: on_turn_changed %s -> %s", pid, name)
         self.__turn = name
         self.__current_turn_var.set(f"Current turn: {name}")
 
@@ -345,10 +347,10 @@ class tictactoe(tk.Tk):
             for col in range(self.__grid_height):
                 grid_button = tk.Button(
                     self.board,
-                text = self.__default_text,
-                width = self.__button_width,
-                height = self.__button_height,
-                command = lambda b_row=row, b_col=col: self.on_click(b_row, b_col)
+                    text=self.__default_text,
+                    width=self.__button_width,
+                    height=self.__button_height,
+                    command=lambda b_row=row, b_col=col: self.on_click(b_row, b_col)
                 )
                 grid_button.grid(row=row,column=col)
 

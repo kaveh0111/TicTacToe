@@ -24,6 +24,10 @@ from Domain.gameEngine.Board import Board
 # Domain - Observer interface (UI/voice/logging subscribers implement this)
 #from Domain.gameEngine.GEObserver import GEObserver
 from enum import Enum
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class GameStatus(Enum):
     PLAYING = "PLAYING"
@@ -35,12 +39,15 @@ class TurnStrategy:
         self._current_player_idx: int = -1   # so first call gives index 0
 
     def getNextTurn(self, player_list: List[Player]) -> Player:
-        if player_list is None:
-            raise ValueError("TurnStrategy: player_list is None")
-        if len(player_list) != 2:
-            raise ValueError("TurnStrategy: player_list should have 2 elements")
+        assert player_list is not None, "TurnStrategy: player_list is None"
+        assert len(player_list) == 2, "TurnStrategy: player_list should have 2 elements"
 
         self._current_player_idx = (self._current_player_idx + 1) % len(player_list)
+        logger.debug(
+            "TurnStrategy.getNextTurn() -> idx=%s, player=%s",
+            self._current_player_idx,
+            player_list[self._current_player_idx],
+        )
         return player_list[self._current_player_idx]
 
 
@@ -55,10 +62,8 @@ class GameEngine(ABC):
                  turn_strategy : TurnStrategy = None,
                  status_checker: GameStatusChecker = None) -> None:
 
-        if player_list is None:
-            raise ValueError("GameEngine: player_list is None")
-        if len(player_list) < 2:
-            raise ValueError("TurnStrategy: player_list has less than 2 elements")
+        assert player_list is not None, "GameEngine: player_list is None"
+        assert len(player_list) >= 2, "TurnStrategy: player_list has less than 2 elements"
 
         self._game_checker = status_checker
         if self._game_checker is None:
@@ -67,11 +72,9 @@ class GameEngine(ABC):
         if self._turn_strategy is None:
             self._turn_strategy = TurnStrategy()
 
-        if board is None:
-            raise ValueError("GameEngine: board is None")
+        assert board is not None, "GameEngine: board is None"
 
-        if observer is None:
-            raise ValueError("GameEngine: observer is None")
+        assert observer is not None, "GameEngine: observer is None"
 
         self._player_list: List[Player] = player_list
         self._board: Board = board
@@ -79,6 +82,13 @@ class GameEngine(ABC):
         self._winner : Optional[Player] = None
         self._winner_line = None
         self._current_turn: Player = self._turn_strategy.getNextTurn(self._player_list)
+
+        logger.debug(
+            "GameEngine.__init__(): board=%s, players=%s, current_turn=%s",
+            board,
+            player_list,
+            self._current_turn,
+        )
 
         self._observer.notify(
             TurnChanged(current_player=self._current_turn.player_id))
@@ -140,9 +150,9 @@ class GameEngineImp(GameEngine):
         self._game_state = GameStatus.PLAYING
 
     def setObserver(self, observer: Observer) -> None:
-        if observer is None:
-            raise ValueError("GameEngine, setObserver: observer is None")
+        assert observer is not None, "GameEngine, setObserver: observer is None"
         self._observer = observer
+        logger.debug("GameEngineImp.setObserver(): observer=%s", observer)
 
     def getObserver(self) -> Optional[Observer]:
         if self._observer is None:
@@ -151,9 +161,9 @@ class GameEngineImp(GameEngine):
 
 
     def setBoard(self, board:Board) -> None:
-        if board is None:
-            raise ValueError("GameEngine, setBoard: board is None")
+        assert board is not None, "GameEngine, setBoard: board is None"
         self._board = board
+        logger.debug("GameEngineImp.setBoard(): board=%s", board)
 
 
     def getBoard(self) -> Optional[Board]:
@@ -167,9 +177,9 @@ class GameEngineImp(GameEngine):
 
 
     def acceptMove(self, row:int, col:int, player : Player) -> bool:
-        print("GameEngineImp, acceptmove")
+        logger.debug("GameEngineImp.acceptMove(): player=%s, row=%s, col=%s", player, row, col)
         if not self._board.isEmptyCell(row, col):
-            print("GameEngineImp, the cell is full")
+            logger.debug("GameEngineImp.acceptMove(): cell (%s, %s) is full", row, col)
             return False
         self._board.selectCell(row, col, player.player_id)
         #self.inform()
@@ -195,6 +205,7 @@ class GameEngineImp(GameEngine):
 
     def check_finish(self):
         game_result: GameResult = self._game_checker.evaluate(self._board)
+        logger.debug("GameEngineImp.check_finish(): result=%s", game_result)
 
         if not game_result.finished:
             return
@@ -219,22 +230,21 @@ class GameEngineImp(GameEngine):
 
     def getMachineMove(self) -> Tuple[int, int]:
         """the machine player will wait for the move from machine user."""
-        if not (self._current_turn.getPlayerType() is PlayerType.COMPUTER):
-            raise ValueError("Current turn player is not the computer player turn")
+        assert (
+            self._current_turn.getPlayerType() is PlayerType.COMPUTER
+        ), "Current turn player is not the computer player turn"
+        logger.debug("GameEngineImp.getMachineMove(): current_turn=%s", self._current_turn)
         return self._current_turn.play(self._board)
 
 
     def changeTurn(self) -> None:
         self._current_turn = self._turn_strategy.getNextTurn(self._player_list)
+        logger.debug("GameEngineImp.changeTurn(): new current_turn=%s", self._current_turn)
         self._observer.notify(
             TurnChanged(current_player=self._current_turn.player_id))
 
 
 
     def inform(self, event: GameEvent) -> None:
+        logger.debug("GameEngineImp.inform(): event=%s", event)
         self._observer.notify(event)
-
-
-
-
-
