@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import font, Label, StringVar, ttk, Button
+
+from tkinter import font, Label, StringVar, ttk, Button, messagebox
+
 from tkinter.constants import DISABLED
 from typing import List, Tuple, Optional
 import warnings
@@ -39,6 +41,10 @@ class tictactoe(tk.Tk):
         self._cells = {}
         self.__buttons: List[List[tk.Button]] = []
 
+        # remember default button colors for reset on restart
+        self._default_button_bg: Optional[str] = None  # NEW
+        self._default_button_fg: Optional[str] = None  # NEW
+
 
         self.__human_name_var: StringVar = StringVar(self, value="My name: ")
         self.__machine_name_var: StringVar = StringVar(self, value="Machine name: ")
@@ -73,13 +79,28 @@ class tictactoe(tk.Tk):
             self.__game_cols_drop_down["menu"].entryconfig(idx, state=tk.DISABLED)
             self.__game_rows_drop_down["menu"].entryconfig(idx, state=tk.DISABLED)
 
+        self.__difficulty_options: Tuple[str, ...] = ("Easy", "Hard")
+        self.__selected_difficulty: tk.StringVar = tk.StringVar(self)
+        self.__selected_difficulty.set(self.__difficulty_options[0])  # default = "Easy"
+
+        difficulty_label = tk.Label(button_frame, text="Difficulty:")
+        difficulty_label.pack(side="left", padx=5)
+
+        self.__difficulty_drop_down = tk.OptionMenu(
+            button_frame,
+            self.__selected_difficulty,
+            *self.__difficulty_options
+        )
+        self.__difficulty_drop_down.pack(side="left", padx=2)
+
+        # Disable "Hard" option (index 1)
+        self.__difficulty_drop_down["menu"].entryconfig(1, state=tk.DISABLED)
+
         #button = tk.Button(self, text="Start")
-        button = tk.Button(button_frame, text="Start", command=self._on_start_clicked)
-        button.pack(side="left", padx=4, pady=4)
-        #button = tk.Button(button_frame, text="Pause")
+        self._start_button = tk.Button(button_frame, text="Start", command=self._on_start_clicked)
+        self._start_button.pack(side="left", padx=4, pady=4)
+        #button = tk.Button(button_frame, text="Restart")
         #button.pack(side="left", padx=4)
-        button = tk.Button(button_frame, text="Restart")
-        button.pack(side="left", padx=4)
 
         info_frame = tk.Frame(self)
         info_frame.pack(side="top", pady=4)
@@ -94,11 +115,22 @@ class tictactoe(tk.Tk):
         self.board.pack(side="top", pady=8)
         self.makeGrid()
 
+    """def setMyPlayer(self, player_id: int, player_name: str) -> None:
+        self._my_id = player_id
+        self._my_name = player_name
+        # optional: keep the UI text in sync
+        self.__human_name_var.set(f"My name: {player_name}")"""
     def setMyPlayer(self, player_id: int, player_name: str) -> None:
         self._my_id = player_id
         self._my_name = player_name
         # optional: keep the UI text in sync
         self.__human_name_var.set(f"My name: {player_name}")
+
+        # Initialize current turn to me (human) if not set yet
+        if self.__turn is None:
+            self.__turn = self._my_name
+            self.__current_turn_var.set(f"Current turn: {self._my_name}")
+
 
     def setOpponent(self, player_id: int, player_name: str) -> None:
         self._opponent_id = player_id
@@ -130,14 +162,39 @@ class tictactoe(tk.Tk):
         # Later you can update the specific button from board_snapshot.
         # For now, just print; or you can call cellMarked if __buttons is properly filled.
         print(f"UI: Move made by {event.player_id} at row={event.row}, col={event.col}")
+        self.update_cell(event.player_id, event.row, event.col)
         # Example if you later wire __buttons correctly:
         # self.cellMarked(event.row, event.col)
 
-    def on_turn_changed(self, event: TurnChanged) -> None:
+    def gameWon(self, winner_id: int) -> None:
+        """Handle a win from the UI side (single place to change later)."""
+        winner_name = self._player_name_from_id(winner_id)
+        msg = f"Game finished – winner: {winner_name}"
+
+        print("UI:", msg)
+        self.show_game_result_prompt("Game Finished", msg)
+
+        # Stop further moves
+        self.disableButtons()
+
+
+    def update_cell(self, player_id: int, row: int, col: int):
+        btn = self.__buttons[row][col]
+
+        style = self.style_for_player(player_id)
+
+        # Apply style settings
+        for key, value in style.items():
+            btn[key] = value
+
+        btn.configure(state=DISABLED)
+
+
+    """def on_turn_changed(self, event: TurnChanged) -> None:
         # Adapt the event to your existing `turnChanged` method
         print("ui on_turn_changed" , event)
         self.turnChanged(event.current_player)
-
+    """
     def on_ilegal_move(self, event: IlegalMove) -> None:
         print(f"UI: Illegal move by {event.player} at row={event.row}, col={event.col}")
         # later you can show a popup or status label here
@@ -148,12 +205,31 @@ class tictactoe(tk.Tk):
 
     def on_game_finished(self, event: GameFinished) -> None:
         if event.winner_id is None:
-            print("UI: Game finished – draw")
+            msg = "Game finished – draw."
+            print("UI:", msg)
+            self.show_game_result_prompt("Game Finished", msg)
+            self.disableButtons()
         else:
+            # Delegate win handling to the modular method
             self.gameWon(event.winner_id)
-        # you may also want to disable input:
-        # self.disableButtons()
 
+    def on_game_over(self, event: GameOver) -> None:
+        if event.winner is None:
+            msg = "Game over – draw."
+        else:
+            winner_name = self._player_name_from_id(event.winner)
+            msg = f"Game over – winner: {winner_name}"
+
+        print("UI:", msg)
+
+        # Show modular prompt
+        self.show_game_result_prompt("Game Over", msg)
+
+        # this is a good place to disable UI:
+        self.disableButtons()
+
+
+    """
     def on_game_over(self, event: GameOver) -> None:
         if event.winner is None:
             print("UI: Game over – draw")
@@ -161,7 +237,7 @@ class tictactoe(tk.Tk):
             self.gameWon(event.winner)
         # this is a good place to disable UI:
         self.disableButtons()
-
+    """
     def startGame(self):
         #call gameApp for building game
         pass
@@ -206,8 +282,33 @@ class tictactoe(tk.Tk):
         #it should call app layer function
 
     def _on_start_clicked(self) -> None:
-        # Delegate creation + wiring to the builder
+        """
+        Start a new game or restart an existing one.
+        - Reset UI board and labels
+        - Build a fresh GameApp and (re)bind observers
+        """
+        self._reset_ui_for_new_game()      # NEW: clear board & current turn
         self._app_builder.build_and_bind_game(self)
+        self._start_button.config(text="Restart")
+
+    def _reset_ui_for_new_game(self) -> None:
+        """
+        Reset all UI state to a fresh game:
+        - clear board visuals
+        - re-enable buttons
+        - clear current turn label (will be set by TurnChanged)
+        """
+        # Reset board buttons
+        for row in self.__buttons:
+            for btn in row:
+                btn.config(
+                    text=self.__default_text,
+                    state="normal",
+                    bg=self._default_button_bg or btn.cget("bg"),
+                    fg=self._default_button_fg or btn.cget("fg"),
+                )
+        self.__turn = None
+        self.__current_turn_var.set("Current turn: ")
 
     def cellMarked(self, row: int, col: int):
         self.__buttons[row][col].configure(state=DISABLED)
@@ -233,21 +334,53 @@ class tictactoe(tk.Tk):
         self.__turn = name
         self.__current_turn_var.set(f"Current turn: {name}")
 
-
-    """
-    def turnChanged(self, new_player : str):
-        #consider to change it to not blindly change the turn
-        print("ui turnchanged the new player", new_player)
-        self.__turn = new_player
-        if self.__turn == self._my_name:
-            print("It is your turn ")
-            self.__current_turn_var.set(f"Current turn: {self._my_name}")
+    def style_for_player(self, player_id: int):
+        """
+        Return styling options for grid buttons depending on which player moved.
+        This makes styling modular and easy to modify in future.
+        """
+        if player_id == self._my_id:
+            return {
+                "bg": "lightgreen",
+                "fg": "black",
+                "text": "X"  # or self._my_sign if you later add sign
+            }
+        elif player_id == self._opponent_id:
+            return {
+                "bg": "lightcoral",
+                "fg": "white",
+                "text": "O"
+            }
         else:
-            print("It is the turn of", new_player)
-            self.__current_turn_var.set(f"Current turn: {self.__turn}")
-    """
-    def gameWon(self, winner : str):
-        print("the winner is ", winner)
+            # fallback
+            return {
+                "bg": "yellow",
+                "fg": "black",
+                "text": "?"
+            }
+
+    def _player_name_from_id(self, pid: Optional[int]) -> str:
+        """Map a player id from the domain to a readable name for UI."""
+        if pid is None:
+            return "No one"
+
+        if pid == self._my_id:
+            return self._my_name or f"Player {pid}"
+        if pid == self._opponent_id:
+            return self._opponent_name or f"Player {pid}"
+
+        return f"Player {pid}"
+
+    def show_game_result_prompt(self, title: str, message: str) -> None:
+        """
+        UI hook to show the game result.
+
+        Kept in a single method so later you can:
+        - replace messagebox with a custom Toplevel window
+        - log to a status bar instead
+        - or do multiple things from here.
+        """
+        messagebox.showinfo(title, message)
 
     def makeGrid(self):
         for row in range(self.__grid_width):
@@ -262,6 +395,10 @@ class tictactoe(tk.Tk):
                 )
                 grid_button.grid(row=row,column=col)
 
+                if self._default_button_bg is None:
+                    self._default_button_bg = grid_button.cget("bg")
+                if self._default_button_fg is None:
+                    self._default_button_fg = grid_button.cget("fg")
                 #grid_button.bind("<Button-1>", self.on_click(row,col))
                 grid_button.bind("<Enter>", self.on_mouse_enter)
                 grid_button.bind("<Leave>", self.on_mouse_leave)

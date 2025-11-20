@@ -217,9 +217,11 @@ class GameAppSinglePlayer(GameApp):
             # invalid move (cell full etc.), you might notify UI and return
             return
         print("after sending the move to the game engine and it is accepted", )
+        """
         self._game_engine.check_finish()
         if not self._game_engine.isGameFinished():
             self._game_engine.changeTurn()
+        """
 
     def onMove(self, player: Player, row: int, column: int) -> None:
         #here the game engine either accepted the move done by the user or

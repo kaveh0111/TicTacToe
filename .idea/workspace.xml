@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="during solving ui problem">
+    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="solved callbacks">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/AppObserver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/AppObserver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Application/GameApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GameApp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/events.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/player/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/player/Player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/player/machineplayerstrategy/MachinePlayerStrategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/player/machineplayerstrategy/MachinePlayerStrategy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/UiClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/UiClass.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -270,7 +265,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763592485990</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="solved callbacks">
+      <option name="closed" value="true" />
+      <created>1763611858280</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1763611858280</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -303,6 +306,7 @@
     <MESSAGE value="after solving observer stream until app observer" />
     <MESSAGE value="after solving extra player" />
     <MESSAGE value="during solving ui problem" />
-    <option name="LAST_COMMIT_MESSAGE" value="during solving ui problem" />
+    <MESSAGE value="solved callbacks" />
+    <option name="LAST_COMMIT_MESSAGE" value="solved callbacks" />
   </component>
 </project>
