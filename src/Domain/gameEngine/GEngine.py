@@ -81,7 +81,7 @@ class GameEngine(ABC):
         self._current_turn: Player = self._turn_strategy.getNextTurn(self._player_list)
 
         self._observer.notify(
-            TurnChanged(current_player=str(self._current_turn.player_id)))
+            TurnChanged(current_player=self._current_turn.player_id))
 
 
     def getCurrentTurn(self) -> Player:
@@ -189,16 +189,19 @@ class GameEngineImp(GameEngine):
         if not self._board.isEmptyCell(row, col):
             print("GameEngineImp, the cell is full")
             return False
-        self._board.selectCell(row, col, str(player.player_id))
+        self._board.selectCell(row, col, player.player_id)
         #self.inform()
         self._observer.notify(
             MoveMade(
-                player=str(player.player_id),
+                player_id=player.player_id,
                 row=row,
                 col=col,
                 board_snapshot=self._board.get_snapshot()
             )
         )
+        self.check_finish()
+        if not self.isGameFinished():
+            self.changeTurn()
         return True
 
 
@@ -249,7 +252,7 @@ class GameEngineImp(GameEngine):
     def changeTurn(self) -> None:
         self._current_turn = self._turn_strategy.getNextTurn(self._player_list)
         self._observer.notify(
-            TurnChanged(current_player=str(self._current_turn.player_id)))
+            TurnChanged(current_player=self._current_turn.player_id))
 
 
 

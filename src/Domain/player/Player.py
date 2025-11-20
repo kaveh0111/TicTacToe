@@ -86,7 +86,7 @@ class MachinePlayer(Player):
             # Programming error: caller violated the contract
             raise ValueError("MachinePlayerStrategy: board must not be None")
         return_tuple : Tuple[int, int] = self._strategy.play(board)
-        print(f"{self.name} (CPU) calculates and plays a move.")
+        print(f"{self.getPlayerName} (CPU) calculates and plays a move.")
         return return_tuple
 
     def getPlayerType(self) -> PlayerType:

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import font, Label, StringVar, ttk, Button
 from tkinter.constants import DISABLED
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import warnings
 
 from Application.GAppFactory import GameAppBuilder
@@ -129,7 +129,7 @@ class tictactoe(tk.Tk):
     def on_move_made(self, event: MoveMade) -> None:
         # Later you can update the specific button from board_snapshot.
         # For now, just print; or you can call cellMarked if __buttons is properly filled.
-        print(f"UI: Move made by {event.player} at row={event.row}, col={event.col}")
+        print(f"UI: Move made by {event.player_id} at row={event.row}, col={event.col}")
         # Example if you later wire __buttons correctly:
         # self.cellMarked(event.row, event.col)
 
@@ -218,6 +218,23 @@ class tictactoe(tk.Tk):
         print("The cell is unmarked since the user selected it")
         #it is used for review game
 
+    def on_turn_changed(self, event: TurnChanged) -> None:
+        # event.current_player is a player id
+        pid = event.current_player
+
+        if pid == self._my_id:
+            name = self._my_name
+        elif pid == self._opponent_id:
+            name = self._opponent_name
+        else:
+            name = f"Player {pid}"
+
+        print("ui on_turn_changed", pid, "->", name)
+        self.__turn = name
+        self.__current_turn_var.set(f"Current turn: {name}")
+
+
+    """
     def turnChanged(self, new_player : str):
         #consider to change it to not blindly change the turn
         print("ui turnchanged the new player", new_player)
@@ -228,7 +245,7 @@ class tictactoe(tk.Tk):
         else:
             print("It is the turn of", new_player)
             self.__current_turn_var.set(f"Current turn: {self.__turn}")
-
+    """
     def gameWon(self, winner : str):
         print("the winner is ", winner)
 

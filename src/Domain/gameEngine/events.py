@@ -33,7 +33,7 @@ class IlegalMove(GameEvent):
 
 @dataclass
 class MoveMade(GameEvent):
-    player: str
+    player_id: int
     row: int
     col: int
     board_snapshot: list[list[str]]

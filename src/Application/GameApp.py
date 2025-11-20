@@ -43,7 +43,6 @@ class GameApp(ABC):
         engine_observer.setSubscriber(self._observer.notify)
 
         # store the dependency; if not provided, create a default one
-        self._observer: AppObserver = app_observer if app_observer is not None else AppObserver()
         self._observer.subscribe(GameStarted, self.onGameStarted)
         self._observer.subscribe(MoveMade, self.onMoveMade)
         self._observer.subscribe(TurnChanged, self.onTurnChangedEvent)
@@ -79,7 +78,7 @@ class GameApp(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def getPlayer(self, player_id: str) -> Optional[Player]:
+    def getPlayer(self, player_id:int) -> Optional[Player]:
         # it checks if the given Id is related to id of a game player, return its object, otherwise return None
         raise NotImplementedError
 
@@ -100,7 +99,7 @@ class GameApp(ABC):
         Default: adapt to existing onMove(player, row, col).
         """
         print("game app: ................ on move made")
-        player_obj = self.getPlayer(event.player)
+        player_obj = self.getPlayer(event.player_id)
         if player_obj is not None:
             self.onMove(player_obj, event.row, event.col)
 
@@ -226,7 +225,7 @@ class GameAppSinglePlayer(GameApp):
         #here the game engine either accepted the move done by the user or
         #it give the result of the game done by one of the players (machine or other palyers in multiplayer games)
         #this function will call the client code GUI to update it (or later throw web API)
-        raise NotImplementedError
+        print("I recived a move notification from gameengine")
 
     def isGamePlayer(self, player: Player) -> bool:
         if player is None:

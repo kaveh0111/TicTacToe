@@ -32,4 +32,13 @@ class Observer:
 
 
 
+        """
+                for call_back in handlers:
+            try:
+                call_back(event)
+            except Exception as e:
+                print(f"AppObserver: handler {call_back} failed with {e}")
+
+        """
+
 
