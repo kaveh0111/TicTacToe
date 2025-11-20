@@ -35,27 +35,6 @@ class RandomPlayerStrategy(MachinePlayerStrategy):
                     result.append((row, col))
         return result
 
-"""class RandomPlayerStrategy(MachinePlayerStrategy):
-    def __init__(self, num_rows : int = 3, num_col : int = 3) -> None:
-        self._num_rows = num_rows
-        self._num_col = num_col
-    
-    def play(self, board: Board)->Tuple[int, int]:
-        #find a random empty cell and return its row and col number
-        empty_cells = self.__getUnselectedCells(board)
-        random_cell = random.choice(empty_cells)
-        return (random_cell.row, random_cell.col)
-
-    def __getUnselectedCells(self, board: Board)->List[Cell]:
-        return_list = []
-        for row in range(self._num_rows):
-            for col in range(self._num_col):
-                if board._grid[row][col].is_empty:
-                    return_list.append(Cell(row, col))
-        return return_list
-
-"""
-
 class MinimaxPlayerStrategy(MachinePlayerStrategy):
     def __init__(self, num_rows : int = 3, nom_cols : int = 3) -> None:
         self._num_rows = num_rows

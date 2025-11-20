@@ -30,8 +30,7 @@ class GameAppBuilder:
       - set_user(): create & store the User via its factory
       - set_machine_user(): create & store the MachineUser via its factory
       - init_game_engine(): create & store the GameEngine via its factory
-      - run_interface(): create the Interface via its factory (if needed) and run it
-                         with the engine, user, and machine user.
+      - run_interface():  run it with the engine, user, and machine user.
 
     Subclasses provide the concrete factories by implementing the abstract
     factory properties below.
@@ -98,4 +97,3 @@ class GameAppBuilder:
         self.setup_ui_players(window)
         return game_app
 
-#builder = GameAppBuilder().getNewGameApp()

@@ -12,8 +12,6 @@ from Application.AppObserver import Observer
 from Domain.gameEngine.events import *
 
 
-#from PyQt6.QtCore.QProcess import state
-
 
 #This class is responsibe for UI
 #it is loosly coupled and only dependent on its lower layer
@@ -115,11 +113,6 @@ class tictactoe(tk.Tk):
         self.board.pack(side="top", pady=8)
         self.makeGrid()
 
-    """def setMyPlayer(self, player_id: int, player_name: str) -> None:
-        self._my_id = player_id
-        self._my_name = player_name
-        # optional: keep the UI text in sync
-        self.__human_name_var.set(f"My name: {player_name}")"""
     def setMyPlayer(self, player_id: int, player_name: str) -> None:
         self._my_id = player_id
         self._my_name = player_name
@@ -155,34 +148,26 @@ class tictactoe(tk.Tk):
         self._observer.subscribe(GameOver, self.on_game_over)
 
     def on_game_started(self, event: GameStarted) -> None:
-        # For now, just log. Later, you could resize grid, reset UI, etc.
+        # For now, just log. Later, may resize grid, reset UI, etc.
         print("UI: Game started, players:", event.player)
 
     def on_move_made(self, event: MoveMade) -> None:
-        # Later you can update the specific button from board_snapshot.
-        # For now, just print; or you can call cellMarked if __buttons is properly filled.
         print(f"UI: Move made by {event.player_id} at row={event.row}, col={event.col}")
         self.update_cell(event.player_id, event.row, event.col)
-        # Example if you later wire __buttons correctly:
-        # self.cellMarked(event.row, event.col)
 
     def gameWon(self, winner_id: int) -> None:
         """Handle a win from the UI side (single place to change later)."""
         winner_name = self._player_name_from_id(winner_id)
         msg = f"Game finished – winner: {winner_name}"
-
         print("UI:", msg)
         self.show_game_result_prompt("Game Finished", msg)
-
         # Stop further moves
         self.disableButtons()
 
 
     def update_cell(self, player_id: int, row: int, col: int):
         btn = self.__buttons[row][col]
-
         style = self.style_for_player(player_id)
-
         # Apply style settings
         for key, value in style.items():
             btn[key] = value
@@ -190,11 +175,6 @@ class tictactoe(tk.Tk):
         btn.configure(state=DISABLED)
 
 
-    """def on_turn_changed(self, event: TurnChanged) -> None:
-        # Adapt the event to your existing `turnChanged` method
-        print("ui on_turn_changed" , event)
-        self.turnChanged(event.current_player)
-    """
     def on_ilegal_move(self, event: IlegalMove) -> None:
         print(f"UI: Illegal move by {event.player} at row={event.row}, col={event.col}")
         # later you can show a popup or status label here
@@ -221,23 +201,11 @@ class tictactoe(tk.Tk):
             msg = f"Game over – winner: {winner_name}"
 
         print("UI:", msg)
-
-        # Show modular prompt
         self.show_game_result_prompt("Game Over", msg)
-
-        # this is a good place to disable UI:
+        #  to disable UI:
         self.disableButtons()
 
 
-    """
-    def on_game_over(self, event: GameOver) -> None:
-        if event.winner is None:
-            print("UI: Game over – draw")
-        else:
-            self.gameWon(event.winner)
-        # this is a good place to disable UI:
-        self.disableButtons()
-    """
     def startGame(self):
         #call gameApp for building game
         pass
@@ -264,7 +232,6 @@ class tictactoe(tk.Tk):
             warnings.warn("UI: GameApp is not set. Press Start to build the game first.")
             return
 
-            # Make sure we know who the human player is
         if self._my_id is None:
             warnings.warn("UI: Human player id is not set on UI (setMyPlayer was not called).")
             return
@@ -279,8 +246,6 @@ class tictactoe(tk.Tk):
         self._app.executeMove(player, row, col)
 
 
-        #it should call app layer function
-
     def _on_start_clicked(self) -> None:
         """
         Start a new game or restart an existing one.
@@ -294,9 +259,6 @@ class tictactoe(tk.Tk):
     def _reset_ui_for_new_game(self) -> None:
         """
         Reset all UI state to a fresh game:
-        - clear board visuals
-        - re-enable buttons
-        - clear current turn label (will be set by TurnChanged)
         """
         # Reset board buttons
         for row in self.__buttons:
@@ -343,7 +305,7 @@ class tictactoe(tk.Tk):
             return {
                 "bg": "lightgreen",
                 "fg": "black",
-                "text": "X"  # or self._my_sign if you later add sign
+                "text": "X"  # or self._my_sign if it has other sign
             }
         elif player_id == self._opponent_id:
             return {
@@ -374,11 +336,6 @@ class tictactoe(tk.Tk):
     def show_game_result_prompt(self, title: str, message: str) -> None:
         """
         UI hook to show the game result.
-
-        Kept in a single method so later you can:
-        - replace messagebox with a custom Toplevel window
-        - log to a status bar instead
-        - or do multiple things from here.
         """
         messagebox.showinfo(title, message)
 

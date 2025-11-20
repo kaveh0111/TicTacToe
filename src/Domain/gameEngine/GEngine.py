@@ -114,33 +114,15 @@ class GameEngine(ABC):
     def isGameFinished(self) -> bool:
         #Pause the game.
         raise NotImplementedError
-    """
-    def getWinner(self) -> Optional[Player]:
-        #first check if the game is finished, then return None or the player game
-        raise NotImplementedError
-
-    @abstractmethod
-    def finish(self) -> None:
-        
-        #clear the game board.
-        raise NotImplementedError
-    """
 
     @abstractmethod
     def changeTurn(self) -> None:
         """It will change the turn to another player."""
         raise NotImplementedError
-    """
-    @abstractmethod
-    def addObserver(self, observer : Observer) -> None:
-        #accept the observer class for notifications
-        raise NotImplementedError
-    """
+
     @abstractmethod
     def inform(self, event: GameEvent) -> None:
         raise NotImplementedError
-
-
 
 
 
@@ -210,14 +192,7 @@ class GameEngineImp(GameEngine):
             return True
         return False
 
-    """
-    def getWinner(self) -> Optional[Player]:
-        #first check if the game is finished, then return None or the player game
-        raise NotImplementedError
 
-    def finish(self) -> None:
-        self._game_state = GameStatus.FINISHED
-    """
     def check_finish(self):
         game_result: GameResult = self._game_checker.evaluate(self._board)
 

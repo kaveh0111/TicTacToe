@@ -14,8 +14,7 @@ class GameResult:
     """
     """
     finished: True  -> game over (win or draw)
-    winner: whatever Cell stores (e.g. 'X', 'O', player_id, CellStatus.X, ...)
-
+    winner: whatever Cell stores, player_id
     """
     finished: bool
     winner: Optional[Any]

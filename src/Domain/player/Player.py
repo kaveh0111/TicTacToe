@@ -92,13 +92,3 @@ class MachinePlayer(Player):
     def getPlayerType(self) -> PlayerType:
         return self.__player_type
 
-
-if __name__ == "__main__":
-    # call constructors with the required arguments (fixes bug #2)
-    players: list[Player] = [
-        HumanPlayer("Alex"),
-        MachinePlayer("HAL"),
-    ]
-    for p in players:
-        #move = p.play(None)
-        print(f"{p.getPlayerName} played: ")
