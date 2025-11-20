@@ -4,14 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="Before final review">
+    <list default="true" id="97b3dc3f-94ee-4912-8b55-c737e01d945c" name="Changes" comment="final commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/AppObserver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/AppObserver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/GAppFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GAppFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/GameApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/GameApp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEObserver.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEObserver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Domain/gameEngine/GEngine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UiClass.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/UiClass.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +87,35 @@
       <recent name="C:\Users\kaveh\PycharmProjects\TicTacToe\src\Domain\player" />
       <recent name="C:\Users\kaveh\PycharmProjects\TicTacToe\src\Domain" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="TicTacToe" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -293,7 +316,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763653061921</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="final commit">
+      <option name="closed" value="true" />
+      <created>1763654585455</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1763654585455</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -329,6 +360,7 @@
     <MESSAGE value="solved callbacks" />
     <MESSAGE value="all the UI problems solved, only UI turn change remained" />
     <MESSAGE value="Before final review" />
-    <option name="LAST_COMMIT_MESSAGE" value="Before final review" />
+    <MESSAGE value="final commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="final commit" />
   </component>
 </project>
